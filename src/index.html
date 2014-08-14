@@ -97,20 +97,25 @@
                     <span class="glyphicon glyphicon-refresh pull-right" ng-click="HistCtrl.reload()"></span>
                   </h3>
                 </div>
-                <table class="table">
+                <table class="table" ng-hide="HistCtrl.history.length == 0">
                   <thead>
                     <tr>
-                      <th>Query</th>
+                      <th>Query Text</th>
+                      <th>Response</th>
                       <th>When</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr ng-repeat="item in HistCtrl.history">
-                      <td>{{item.packet}}</td>
-                      <td>{{item.when}}</td>
+                      <td>'{{ item.query.query.text }}'</td>
+                      <td>{{ item.packet }}</td>
+                      <td>{{ item.when }}</td>
                     </tr>
                   </tbody>
                 </table>
+                <div class="panel-body" ng-show="HistCtrl.history.length == 0">
+                  There are no queries in Que's history.
+                </div>
               </div>
             </div>
 

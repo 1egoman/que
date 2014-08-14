@@ -125,7 +125,7 @@ http.createServer(function (req, res) {
           }
 
           // add to history
-          hist = {packet: out, when: new Date()}
+          hist = {packet: out, when: new Date(), query: body}
           history.push(hist)
 
           res.end( JSON.stringify(out) );

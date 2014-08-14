@@ -63,7 +63,7 @@
       // searchbox controller
       $("input.search-box").focus(function(){ 
         $(this).data("hasfocus", true);
-        $(this).animate({width: 500}, 250);
+        $(this).animate({width: 400}, 250);
       });
       $("input.search-box").blur(function() { 
         $(this).data("hasfocus", false);
@@ -75,6 +75,7 @@
         if (ev.which === 13 && $("input.search-box").data("hasfocus")) {
           // user hit enter
           $("form.navbar-form.navbar-right button").click()
+          console.log(1)
         }
       });
       </script>

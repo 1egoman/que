@@ -60,7 +60,7 @@ app.controller('navController', function($http) {
       }
     });
 
-  };
+  }.throttle(100)
 
   this.fillSearch = function(s) {
     this.searchData = s;
@@ -156,7 +156,7 @@ app.controller('serviceController', function($scope, $sce, $http){
 });
 
 // manages query history
-app.controller("HistorianController", function($http){
+app.controller("HistorianController", function($http, $interval){
   
   // history
   this.history = []
@@ -178,10 +178,16 @@ app.controller("HistorianController", function($http){
   this.reload = function() {
     root.getHistory().success(function(data){
       root.history = data.history
-      console.log(data.history)
     })
   }
+
+  // initial
   this.reload()
+
+  // auto update
+  $interval(function(){
+    root.reload()
+  }, 5000)
 
 })
 
