@@ -82,6 +82,24 @@
           </ul>
         </div>
 
+        <!-- search -->
+        <div class="col-sm-9 col-sm-offset-3 main row" ng-show='navCtrl.page.name == "Search"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
+          
+          <div class="col-sm-4 col-sm-offset-4 col-md-6 col-sm-offset-3" style="padding-top: 36px;">
+            <form>
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Send Query" 
+                ng-model="navCtrl.searchData" style="width: 100%; height: 4em;" x-webkit-speech/>
+                <button ng-click="navCtrl.search()" class="btn" ng-hide="1">Go</button>
+                <span class="input-group-addon" ng-click="navCtrl.search()" style="cursor: pointer;">
+                  <span class="glyphicon glyphicon-chevron-right"></span>
+                </span>
+              </div>
+            </form>
+          </div>
+
+        </div>
+
         <!-- overview -->
         <div class="col-sm-9 col-sm-offset-3 main" ng-show='navCtrl.page.name == "Overview"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
           <h1 class="page-header">Que Overview</h1>

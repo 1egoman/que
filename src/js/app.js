@@ -4,15 +4,20 @@ var app = angular.module("QueApp", []);
 app.controller('navController', function($http) {
 
   // current page information
-  this.page = {
-    htmlPath: "overview.html",
-    name: "Overview",
-    id: "main-overview",
-    sidebar: false
-  }
+  this.page = {}
 
   this.searchData = ""
   var root = this;
+
+  this.toSearch = function() {
+    // set page data
+    this.page = {
+      name: "Search",
+      id: "main-search"
+    }
+
+  };
+  this.toSearch()
 
   this.toOverview = function() {
     // set page data
@@ -29,7 +34,8 @@ app.controller('navController', function($http) {
     this.page = {
       htmlPath: "services.html",
       name: "Services",
-      id: "main-services"
+      id: "main-services",
+      sidebar: true
     }
 
   };
@@ -38,7 +44,8 @@ app.controller('navController', function($http) {
     // set page data
     this.page = {
       name: "Plugins",
-      id: "main-plugins"
+      id: "main-plugins",
+      sidebar: true
     }
 
   };
@@ -143,6 +150,7 @@ app.controller('serviceController', function($scope, $sce, $http){
         name: "people",
         title: "People",
         html: "builtin",
+
         icon: "glyphicon-user"
       }]
 

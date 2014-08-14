@@ -18,6 +18,12 @@
 
 
       <ul class="nav navbar-nav">
+        <li ng-class="{active: navCtrl.page.name == 'Search'}">
+          <a href ng-click="navCtrl.toSearch()">
+            <span class="glyphicon glyphicon-search"></span>
+            Query
+          </a>
+        </li>
         <li ng-class="{active: navCtrl.page.name == 'Overview'}">
           <a href ng-click="navCtrl.toOverview()">
             <span class="glyphicon glyphicon-stats"></span>
@@ -51,13 +57,6 @@
           </a>
         </li>
       </ul>
-
-      <form class="navbar-form navbar-right">
-        <div class="input-append">
-          <input type="text" class="form-control search-box" placeholder="Query" ng-model="navCtrl.searchData">
-          <button ng-click="navCtrl.search()" class="btn">Go</button>
-        </div>
-      </form>
 
       <script>
       // searchbox controller
