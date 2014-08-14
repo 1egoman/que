@@ -1,0 +1,14 @@
+{
+  "events": [
+    {
+      "name": "event",
+      "when": "2014-08-04T16:00:51.211Z",
+      "color": "blue"
+    },
+    {
+      "name": "event",
+      "when": "2014-08-05T15:33:16.528Z",
+      "color": "red"
+    }
+  ]
+}

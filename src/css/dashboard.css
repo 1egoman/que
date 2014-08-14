@@ -1,0 +1,100 @@
+body {
+  overflow-y: hidden;
+}
+
+a, a:hover {
+  color: rgb(65, 170, 205);
+}
+
+/* the logo */
+.navbar-brand img {
+  height: 36px;
+  margin-top: -8px;
+}
+/*
+ * Sidebar
+ */
+
+/* Hide for mobile, show later */
+.sidebar {
+  display: none;
+}
+@media (min-width: 768px) {
+  .sidebar {
+    position: fixed;
+    top: 51px;
+    bottom: 0;
+    left: 0;
+    z-index: 1000;
+    display: block;
+    padding: 20px;
+    overflow-x: hidden;
+    overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    background-color: #f5f5f5;
+    border-right: 1px solid #eee;
+  }
+
+  .sidebar.nested {
+    left: 212px;
+    border-left: 2px solid rgba(66, 139, 202, 0.25);
+  }
+
+  .sidebar.nested.second {
+    left: 424px;
+  }
+
+  .third.main {
+    left: 620px;
+    margin-left: 20px;
+  }
+
+  .sidebar div.sidebar-header {
+    font-size: 1.5em;
+    color: #BBB;
+    padding-bottom: 10px;
+  }
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  color: #fff;
+  background-color: rgb(65, 170, 205);;
+}
+
+
+.main {
+  padding: 40px 20px 20px;
+  height: 100%;
+
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  bottom: 0px;
+  right: 0px;
+
+  overflow-y: auto;
+}
+
+.main.services-inner {
+  position: relative;
+}
+
+
+div.personinfo h1 {
+  font-size: 1.5em;
+}
+div.personinfo ul {
+  list-style-type: none;
+  padding-left: 10px;
+}

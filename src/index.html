@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Que Dashboard</title>
+
+    <!-- Bootstrap -->
+    <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/dashboard.css">
+    <link rel="stylesheet" type="text/css" href="css/calendar.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      ">">https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js">
+      ">">https://oss.maxcdn.com/respond/1.4.2/respond.min.js">
+    <![endif]-->
+  </head>
+  <body ng-app="QueApp" ng-controller="navController as navCtrl">
+
+    <nav-header></nav-header>
+
+
+    <div class="container-fluid">
+      <div class="row" ng-controller="serviceController as servCtrl">
+
+        <!-- services sidebar -->
+        <div class="col-md-2 sidebar sidebar-services" ng-show="navCtrl.page.name == 'Services'">
+
+          <ul class="nav nav-sidebar builtin">
+
+            <!-- a builtin service -->
+            <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == true }' ng-repeat="srv in servCtrl.builtins">
+              <a href ng-click="servCtrl.changeService($index, true)">
+                <span class="glyphicon {{ srv.icon }}"></span>
+                {{srv.title}}
+              </a>
+            </li>
+
+            <!-- service settings -->
+            <li ng-class='{active:servCtrl.current == -1 &amp;&amp; servCtrl.lookin == true }'>
+              <a href ng-click="servCtrl.showSettings()">
+                <span class="glyphicon glyphicon-cog"></span>
+                Settings
+              </a>
+            </li>
+
+          </ul>
+
+
+          <!-- show all services in list -->
+          <ul class="nav nav-sidebar">
+            <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == false}' ng-repeat="srv in servCtrl.services">
+              <a href ng-click="servCtrl.changeService($index)">{{srv.title}}</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- plugins sidebar -->
+        <div class="col-md-2 sidebar sidebar-services" ng-show="navCtrl.page.name == 'Plugins'">
+
+          <ul class="nav nav-sidebar builtin">
+
+            <!-- service settings -->
+            <li ng-class='{active:servCtrl.current == -1 &amp;&amp; servCtrl.lookin == true }'>
+              <a href ng-click="servCtrl.showSettings()">
+                <span class="glyphicon glyphicon-cog"></span>
+                Settings
+              </a>
+            </li>
+
+          </ul>
+
+
+          <!-- show all services in list -->
+          <ul class="nav nav-sidebar">
+            <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == false}' ng-repeat="srv in servCtrl.services">
+              <a href ng-click="servCtrl.changeService($index)">{{srv.title}}</a>
+            </li>
+          </ul>
+        </div>
+
+        <!-- overview -->
+        <div class="col-sm-9 col-sm-offset-3 main" ng-show='navCtrl.page.name == "Overview"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
+          <h1 class="page-header">Que Overview</h1>
+          
+          <div class="row">
+
+            <!-- History -->
+            <div class="col-md-6" ng-controller="HistorianController as HistCtrl">
+              <div class="panel panel-info">
+                <div class="panel-heading">
+                  <h3 class="panel-title">
+                    Query History
+                    <span class="glyphicon glyphicon-refresh pull-right" ng-click="HistCtrl.reload()"></span>
+                  </h3>
+                </div>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Query</th>
+                      <th>When</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr ng-repeat="item in HistCtrl.history">
+                      <td>{{item.packet}}</td>
+                      <td>{{item.when}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+
+
+            <!-- load monitor -->
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <h3 class="panel-title">Server Load</h3>
+                </div>
+                <div class="panel-body">
+                  [Graph Here]
+                </div>
+              </div>
+            </div>
+
+
+
+          </div>
+        </div>
+
+        <!-- services -->
+        <div class="col-sm-9 col-sm-offset-3 main row" ng-show='navCtrl.page.name == "Services"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
+          <div class="services-inner">
+          
+            <!-- all non-builtin services are inserted here -->
+            <div ng-bind-html="serviceHtmlString"></div>
+
+            <!-- builtin calendar -->
+            <div class="calendar" ng-show="servCtrl.current == 0 &amp;&amp; servCtrl.lookin == true" ng-controller="calendarController as calCtrl">
+
+              <div class='title'>
+                <button class='btn pull-left' ng-click="calCtrl.prev()">&laquo;</button>
+                <h1>{{calCtrl.eventsInMonth.title}}</h1>
+                <button class='btn pull-right' ng-click="calCtrl.next()">&raquo;</button>
+              </div>
+              <ul>
+                <li ng-repeat="day in calCtrl.eventsInMonth.month" ng-class="day.classes">
+                  <span class='day'>{{day.day}}</span>
+                  <ul>
+                    <li ng-repeat="event in day.events" ng-class="event.color" class="event" data-toggle="popover" title="{{event.name}}" data-content="<strong>When:</strong> {{event.when}}<br/><strong>Where:</strong> {{event.where}}" event>
+                      {{event.name}}
+                      <span aria-hidden="true" ng-click="navCtrl.fillSearch('delete the calendar event named ' + event.name + ' on ' + event.when)">×</span>
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <!-- builtin people -->
+            <div class="people" ng-show="servCtrl.current == 1 &amp;&amp; servCtrl.lookin == true" ng-controller="peopleController as peopCtrl">
+
+
+              <!-- tag list -->            
+              <div class="col-md-2 sidebar nested">
+                <div class="sidebar-header">Tags</div>
+
+                <ul class="nav nav-sidebar">
+                  <li ng-class="{'active': peopCtrl.tag == -1}" ng-click="peopCtrl.chooseTag(-1)"><a href>All</a></li>
+                  <li ng-repeat="tag in peopCtrl.getAllTags()" ng-click="peopCtrl.chooseTag($index)" ng-class="{'active': peopCtrl.tag == $index}">
+                    <a href>{{tag}}</a>
+                  </li>
+                </ul>
+
+              </div>
+
+              <!-- people list -->
+              <div class="col-sm-3 col-md-2 sidebar nested second">
+                <div class="sidebar-header">People</div>
+                <!-- <div class="sidebar-header">root.allTags[root.tag]</div> -->
+
+                <ul class="nav nav-sidebar">
+                  <li ng-repeat="p in peopCtrl.getPeopleForList()" ng-click="peopCtrl.person = p" ng-class="{'active': peopCtrl.person == p}">
+                    <a href>{{p.name.join(' ')}}</a>
+                  </li>
+                </ul>
+
+              </div>
+
+              <div class="col-sm-8 col-md-7 third main" ng-show="peopCtrl.person !== undefined">
+                <h1 style="padding-bottom: 20px;">{{peopCtrl.person.name.join(' ')}}</h1>
+
+                <!-- the information groups -->
+                <div class="personinfo well" ng-repeat="(title, contents) in peopCtrl.person.groups">
+                  
+                  <!-- title -->
+                  <h1>{{ title.spacify().capitalize(true) }}</h1>
+                  
+                  <!-- items -->
+                  <ul>
+                    <li ng-repeat="(name, value) in contents">
+                      <strong>{{ name.spacify().capitalize(true) }}</strong>: 
+                      <a href="//{{value.url}}" ng-show="value.url">{{value.text}}</a>
+                      <span ng-hide="value.url">{{value.text}}</span>
+                    </li>
+                  </ul>
+
+                </div>
+
+
+              </div>
+            </div>
+
+            <!-- builtin service settings -->
+            <div class="service-settings" ng-show="servCtrl.current < 0 &amp;&amp; servCtrl.lookin == true" ng-controller="serviceSettingsController as ssCtrl">
+              f
+            </div>
+
+          </div>
+        </div>
+
+        <!-- search results -->
+        <div class="col-sm-9 col-sm-offset-3 main" ng-show='navCtrl.page.id == "search"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
+          <h1 class="page-header">Search</h1>
+          <h1> -> "{{navCtrl.page.results}}"</h1>
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <!--<script src="js/jquery.min.js"></script>-->
+    <!-- sugar.js -->
+    <script src="js/sugar.min.js"></script>
+    <!-- angular.js -->
+    <script src="js/angular.min.js"></script>
+    <script type="text/javascript" src="js/app.js"></script>
+    <script type="text/javascript" src="js/calendar.js"></script>
+    <script type="text/javascript" src="js/people.js"></script>
+    <script type="text/javascript" src="js/service-settings.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="bootstrap/js/bootstrap.min.js"></script>
+
+    <script>
+      // hide any popovers
+      var timeoutObj;
+      $(document).on('click',function(e) {
+        if(!$(e.target).is('.event')) {
+          if (next) {
+            $(".popover").popover("hide");
+            $(this).css("background", "transparent")
+            next = false;
+            // console.log(next)
+          } else {
+            next = true;
+            // console.log(next)
+          }
+        }
+      });
+    </script>
+
+  </body>
+</html>

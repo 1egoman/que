@@ -1,0 +1,71 @@
+div.calendar {
+  width: 100%;
+  min-width: 800px;
+  font-size: 1.2em;
+
+  padding: 20px;
+  margin: 20px auto;
+  overflow-y: auto;
+}
+
+div.calendar div.title h1 {
+  text-align: center;
+  margin: 0px 0px 30px;
+}
+
+div.calendar div.title button.pull-right {
+  margin-top: -64px;
+}
+
+div.calendar > ul > li {
+  display: inline-block;
+  width: 12.8%; 
+  height: 120px;
+  padding: .6% .8%;
+  position: relative;
+}
+
+div.calendar li ul {
+  float: left;
+  position: absolute;
+  bottom: 0px;
+  padding: 0px 0px 10px;
+
+  list-style-type: none;
+}
+
+div.calendar li ul li {
+  display: inline-block;
+  padding: 4px 8px;
+  margin: 2px 4px;
+  background: #EEE;
+}
+
+div.calendar > ul > li:hover {
+  background: #eee;
+}
+
+span.day {
+  font-size: 1.4em;
+}
+
+li.old span.day {
+  color: #DDD;
+}
+
+li.new span.day {
+  color: #DDD;
+}
+
+.popover.bottom { margin-top: 12px; }
+.popover.top { margin-top: -12px; }
+
+div.calendar li ul li { 
+  text-decoration: none; 
+  cursor: pointer;
+}
+
+div.calendar li ul li.red {background: #c7837b; color: #eee;}
+div.calendar li ul li.blue {background: #7bbfc7; color: #eee;}
+div.calendar li ul li.purple {background: #a97bc7; color: #eee;}
+div.calendar li ul li.green {background: #9ac77b; color: #eee;}

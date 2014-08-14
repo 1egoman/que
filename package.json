@@ -1,0 +1,16 @@
+{
+  "name": "Que",
+  "description": "Understands me",
+  "version": "0.0.1",
+  "dependencies": {
+    "sugar": "*",
+    "minimist": "0.2.x",
+    "curry": "1.2.x",
+    "mime": "1.2.x",
+    "jake": "latest"
+  },
+  "author": {
+    "name": "Ryan Gaus",
+    "twitter": "@rgausnet"
+  }
+}

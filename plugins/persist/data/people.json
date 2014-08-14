@@ -1,0 +1,28 @@
+{
+  "people": [
+    {
+      "name": ["Ryan", "Gaus"],
+      "tags": ["me", "family"],
+      "groups": {
+
+        "social": {
+          "twitter": {
+            "text": "@rgausnet",
+            "url": "twitter.com/rgausnet"
+          },
+          "google-plus": {
+            "text": "+Ryan Gaus",
+            "url": "plus.google.com/u/0/+RyanGaus/"
+          }
+        }
+
+
+      }
+    },
+    {
+      "name": ["John", "Smith"],
+      "tags": ["family", "friends"],
+      "groups": {}
+    }
+  ]
+}
