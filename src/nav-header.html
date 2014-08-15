@@ -18,7 +18,7 @@
 
 
       <ul class="nav navbar-nav">
-        <li ng-class="{active: navCtrl.page.name == 'Search'}">
+        <li ng-class="{active: navCtrl.page.name == 'Search' || navCtrl.page.id == 'search'}">
           <a href ng-click="navCtrl.toSearch()">
             <span class="glyphicon glyphicon-search"></span>
             Query
