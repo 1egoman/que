@@ -71,6 +71,9 @@ app.controller('navController', function($http) {
 
   this.fillSearch = function(s) {
     this.searchData = s;
+
+    // go to search page
+    this.toSearch()
     $("input.search-box").focus()
   }
 
