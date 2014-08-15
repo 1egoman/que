@@ -1,6 +1,6 @@
 // Calendar Controller
 // Manages the services -> calendar service
-angular.module("QueApp").controller('calendarController', function($http){
+angular.module("QueApp").controller('calendarController', function($http, $interval){
   
   this.events = []
   var root = this;
@@ -81,5 +81,10 @@ angular.module("QueApp").controller('calendarController', function($http){
     });
   }
   this.reload()
+
+  // auto update
+  $interval(function(){
+    root.reload()
+  }, 5000)
 
 });
