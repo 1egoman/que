@@ -3,11 +3,35 @@ fs = require('fs');
 
 exports.queries = [
   {
-    validate: /cal/gi,
+    validate: /(cal|calendar)/gi,
     then: function(query, services) {
-      x = new services.calendar(services)
-      x.addEvent({name: "event", "when": new Date(), color: "red"});
-      return "OK"
+
+      // a calendar-based event
+      return services.query.childParentCallback(query, function(query, type, cp, when) {
+        
+        // create new calendar service instance
+        cal = new services.calendar(services)
+
+        // perform the correct action
+        switch (type) {
+
+          // add calendar event
+          case "addition":
+            cal.addEvent({name: cp.child, "when": when, color: "red"});
+            return "Added "+cp.child+" to calendar"
+            break
+
+          // delete calendar event
+          case "subtraction":
+            cal.delEvent({name: cp.child});
+            return "Deleted "+cp.child+" from calendar"
+            break
+
+          default:
+            return "No response for this action"
+            break
+        }
+      })
     }
   }
 ]
@@ -41,6 +65,26 @@ exports.services = {
       events = this.getEvents()
       events.push(e);
       this.putEvents(events);
+    }
+
+    this.delEvent = function(e) {
+      events = this.getEvents()
+      var ret = false;
+
+      needle = Object.values(e)
+
+      events.each(function(each){
+
+        // if some of the values match... we've got a winner
+        if ( Object.values(each).subtract(needle).length != Object.values(each).length ) {
+          // remove and update
+          events.remove(e)
+          root.putEvents(events)
+          ret = true
+          return
+        }
+      })
+      return ret
     }
 
     this.getData = function() {

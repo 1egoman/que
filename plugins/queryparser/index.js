@@ -4,6 +4,101 @@ require('sugar');
 
 // exports.queries = []
 
+/*
+A child parent operation is when the user expresses both a child, and a 
+parent of that child. Examples would include addition, creation, deletion, 
+or modification.
+*/
+var assumeChildParentOperation = function(query, childWords, parentWords) {
+
+  // define global marker
+  allWords = childWords.union(parentWords)
+
+  // for buffering words
+  startKeeping = false
+  wordBuffer = []
+
+  // the results go here
+  child = ""
+  parent = ""
+
+
+  discoverPhrase = function(buffer) {
+    // console.log(buffer);
+
+    if (childWords.indexOf(buffer[0]) !== -1) {
+      // we have a subject!
+      child = buffer.from(1).join(' ')
+    }
+
+    if (parentWords.indexOf(buffer[0]) !== -1) {
+      // we have a subject!
+      parent = buffer.from(1).join(' ')
+    }        
+
+    return buffer
+  }
+
+  // an iteration of the phrase-finding algorithm
+  runIteration = function(q) {
+
+    // what will be returned from the function
+    var response;
+
+    q.each(function(word){
+      // is the word in the array?
+      if ( allWords.indexOf(word) !== -1 ) {
+        startKeeping = !startKeeping; // change if we are buffering words
+
+        if (startKeeping == false) { // if we are no longer buffering words,
+          response = wordBuffer // return the words we have buffered, because the next word changed startKeeping
+          return false
+        }
+
+      }
+
+      if (startKeeping) {
+        wordBuffer.push(word) // append word to the buffer
+      }
+
+      // last word in the whole phrase? nothing of interest after, so return the buffer
+      if (q.last() == word) {
+        response = wordBuffer
+        return false
+      }
+    });
+
+    // clear the buffer
+    wordBuffer = []
+    return response || true;
+  }
+
+  // find the parent
+  q = query.split(' ');
+  for (i=0; i <= 5; i++) {
+
+    // run an iteration to find important parts in the phrase
+    out = runIteration(q)
+
+    // true = no more interesting things left
+    if (out === true) { break; }
+
+    // subtract out the current iteration to find the next thing
+    q = q.subtract(out)
+
+    // lastly, figure out what was just removed
+    discoverPhrase(out)
+
+  }
+
+  // only return if it was a success, otherwise false
+  if (child) {
+    return {child: child, parent: parent || false}
+  } else {
+    return false
+  }
+}
+
 exports.services = {
   query: {
 
@@ -14,11 +109,11 @@ exports.services = {
     assumeAddition: function(query) {
 
       // define markers
-      childWords = ["add", "new", "put"]
+      childWords = ["called", "named", "titled", "dubbed", "add", "new", "put"]
       parentWords = ["to", "on", "from", "in"]
 
       // run the operation
-      return this.assumeChildParentOperation(query, childWords, parentWords)
+      return assumeChildParentOperation(query, childWords, parentWords)
     },
 
     /*
@@ -31,7 +126,7 @@ exports.services = {
       childWords = ["called", "named", "titled", "dubbed"]
 
       // run the operation
-      return this.assumeChildParentOperation(query, childWords, parentWords)
+      return assumeChildParentOperation(query, childWords, parentWords)
     },
 
     /*
@@ -41,11 +136,11 @@ exports.services = {
     assumeSubtraction: function(query) {
 
       // define markers
-      childWords = ["delete", "remove", "check", "trim", "cut", "omit"]
+      childWords = ["called", "named", "titled", "dubbed", "delete", "remove", "check", "trim", "cut", "omit"]
       parentWords = ["to", "on", "from", "in"]
 
       // run the operation
-      return this.assumeChildParentOperation(query, childWords, parentWords)
+      return assumeChildParentOperation(query, childWords, parentWords)
     },
 
     /*
@@ -59,105 +154,164 @@ exports.services = {
       childWords = ["called", "named", "titled", "dubbed"]
 
       // run the operation
-      return this.assumeChildParentOperation(query, childWords, parentWords)
+      return assumeChildParentOperation(query, childWords, parentWords)
     },
 
-
     /*
-    A child parent operation is when the user expresses both a child, and a 
-    parent of that child. Examples would include addition, creation, deletion, 
-    or modification.
+    This parser liiks for times and reports the first one that it sees
+    as a standard Date object
     */
-    assumeChildParentOperation: function(query, childWords, parentWords) {
+    whenParser: function(query) {
 
-      // define global marker
-      allWords = childWords.union(parentWords)
+      // define days of week
+      delim = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
+      
+      // months
+      delim.add(["january", "jan"])
+      delim.add(["febuary", "feb"])
+      delim.add(["march", "mar"])
+      delim.add(["april", "apr"])
+      delim.add(["may"])
+      delim.add(["june", "jun"])
+      delim.add(["july", "jul"])
+      delim.add(["august", "aug"])
+      delim.add(["september", "sep", "sept"])
+      delim.add(["october", "oct"])
+      delim.add(["november", "nov"])
+      delim.add(["december", "dec"])
 
-      // for buffering words
-      startKeeping = false
-      wordBuffer = []
-
-      // the results go here
-      child = ""
-      parent = ""
+      // other words
+      delim.add(["tomorrow", "yesterday", "today"])
 
 
-      discoverPhrase = function(buffer) {
-        // console.log(buffer);
+      // replace common spelling errors
+      query = query.replace("tommorow", "tomorrow").replace("tomorow", "tomorrow").replace("tommorrow", "tomorrow")
+      query = query.replace("on", " ") // can cause strange issues, is there a reason why this is bad?
 
-        if (childWords.indexOf(buffer[0]) !== -1) {
-          // we have a subject!
-          child = buffer.from(1).join(' ')
+      markers = []
+      var ret = false
+
+      // loop through each word in query
+      query.split(' ').each(function(item, a) {
+
+        // find the delimeters, and log their place
+        delim.each(function(d, b){
+          if (item.indexOf(d) !== -1) {
+            markers.push(a)
+          }
+        })
+
+      })
+
+      // now, start at each day found, and look around it
+      markers.each(function(loc){
+        day = query.split(' ')[loc]
+
+        // get the specified amount of words before and after
+        // higher value: find more things, but it may not be able to distinguish between 2 phrases close together
+        // lower value: vice verse
+        words = 2 // here
+        allwords = []
+        for (i = -words; i <= words; i++) {
+          allwords.push( query.split(' ')[loc+i] )
         }
 
-        if (parentWords.indexOf(buffer[0]) !== -1) {
-          // we have a subject!
-          parent = buffer.from(1).join(' ')
-        }        
+        // now, start bruteforcing the dates until one matches
+        for (i = 0; i <= words; i++) {
 
-        return buffer
-      }
-
-      // an iteration of the phrase-finding algorithm
-      runIteration = function(q) {
-
-        // what will be returned from the function
-        var response;
-
-        q.each(function(word){
-          // is the word in the array?
-          if ( allWords.indexOf(word) !== -1 ) {
-            startKeeping = !startKeeping; // change if we are buffering words
-
-            if (startKeeping == false) { // if we are no longer buffering words,
-              response = wordBuffer // return the words we have buffered, because the next word changed startKeeping
-              return false
-            }
-
+          // way one: without the first item
+          one = allwords.slice(i).compact()
+          console.log('  ', one)
+          oneDate = Date.create(one.join(' '))
+          console.log('  ->', oneDate)
+          if ( oneDate != "Invalid Date" ) {
+            ret = oneDate
+            return
           }
 
-          if (startKeeping) {
-            wordBuffer.push(word) // append word to the buffer
+          // way two: without the last item
+          two = allwords.slice(0, -i).compact()
+          console.log('  ', two)
+          twoDate = Date.create(two.join(' '))
+          console.log('  ->', twoDate)
+          if ( twoDate != "Invalid Date" ) {
+            ret = twoDate
+            return
           }
 
-          // last word in the whole phrase? nothing of interest after, so return the buffer
-          if (q.last() == word) {
-            response = wordBuffer
-            return false
+          // way three: without both
+          three = allwords.slice(i).slice(0, -i).compact()
+          console.log('  ', three)
+          threeDate = Date.create(one.join(' '))
+          console.log('  ->', threeDate)
+          if ( threeDate != "Invalid Date" ) {
+            ret = threeDate
+            return
           }
-        });
 
-        // clear the buffer
-        wordBuffer = []
-        return response || true;
-      }
+        }
 
-      // find the parent
-      q = query.split(' ');
-      for (i=0; i <= 5; i++) {
+      })
 
-        // run an iteration to find important parts in the phrase
-        out = runIteration(q)
+      return ret
+    },
 
-        // true = no more interesting things left
-        if (out === true) { break; }
+    /*
+    Wrapper function for most of the stuff in this service. Give it a query
+    and a callback (query, type, child-parent results, when) that returns the
+    query result. The query should then return this.
+    */
+    childParentCallback: function(query, callback) {
 
-        // subtract out the current iteration to find the next thing
-        q = q.subtract(out)
+      // addition?
+      if ( /(add|new|put)/gi.test(query) ) {
 
-        // lastly, figure out what was just removed
-        discoverPhrase(out)
+        // parse query
+        childParent = exports.services.query.assumeAddition( query )
+        
+        // try whenparser to get the time in the query
+        when = exports.services.query.whenParser(query) || new Date()
 
-      }
+        return callback(query, "addition", childParent, when)
 
-      // only return if it was a success, otherwise false
-      if (child) {
-        return {child: child, parent: parent || false}
+      // creation?
+      } else if ( /(create|construct|spawn|establish)/gi.test(query) ) {
+
+        // parse query
+        childParent = exports.services.query.assumeCreation( query )
+        
+        // try whenparser to get the time in the query
+        when = exports.services.query.whenParser(query) || new Date()
+
+        return callback(query, "creation", childParent, when)
+      
+      // subtraction?
+      } else if ( /(delete|remove|check|trim|cut|omit)/gi.test(query) ) {
+
+        // parse query
+        childParent = exports.services.query.assumeSubtraction( query )
+        
+        // try whenparser to get the time in the query
+        when = exports.services.query.whenParser(query) || new Date()
+
+        return callback(query, "subtraction", childParent, when)
+
+      // deletion?
+      } else if ( /destroy/gi.test(query) ) {
+
+        // parse query
+        childParent = exports.services.query.assumeDeletion( query )
+        
+        // try whenparser to get the time in the query
+        when = exports.services.query.whenParser(query) || new Date()
+
+        return callback(query, "deletion", childParent, when)
+
+      // none of the above
       } else {
         return false
       }
     }
-
   }
 }
 
