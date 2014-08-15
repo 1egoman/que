@@ -190,7 +190,7 @@
                   <ul>
                     <li ng-repeat="event in day.events" ng-class="event.color" class="event" data-toggle="popover" title="{{event.name}}" data-content="<strong>When:</strong> {{event.when}}<br/><strong>Where:</strong> {{event.where}}" event>
                       {{event.name}}
-                      <span aria-hidden="true" ng-click="navCtrl.fillSearch('delete the calendar event named ' + event.name + ' on ' + event.when)">×</span>
+                      <span aria-hidden="true" ng-click="navCtrl.fillSearch('delete ' + event.name + ' from calendar on ' + event.when)">×</span>
                     </li>
                   </ul>
                 </li>
@@ -271,7 +271,7 @@
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <!--<script src="js/jquery.min.js"></script>-->
+    <script src="js/jquery.min.js"></script>
     <!-- sugar.js -->
     <script src="js/sugar.min.js"></script>
     <!-- angular.js -->
