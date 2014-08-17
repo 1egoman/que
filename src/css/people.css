@@ -1,0 +1,14 @@
+
+/* add padding to name */
+div.people div.main.third > h1 {
+  padding-top: 30px;
+}
+
+/* personinfo */
+div.personinfo h1 {
+  font-size: 1.5em;
+}
+div.personinfo ul {
+  list-style-type: none;
+  padding-left: 10px;
+}
