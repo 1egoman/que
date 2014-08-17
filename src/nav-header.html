@@ -24,12 +24,6 @@
             Query
           </a>
         </li>
-        <li ng-class="{active: navCtrl.page.name == 'Overview'}">
-          <a href ng-click="navCtrl.toOverview()">
-            <span class="glyphicon glyphicon-stats"></span>
-            Overview
-          </a>
-        </li>
         <li ng-class="{active: navCtrl.page.name == 'Services'}">
           <a href ng-click="navCtrl.toServices()">
             <span class="glyphicon glyphicon-gift"></span>
@@ -40,6 +34,12 @@
           <a href ng-click="navCtrl.toPlugins()">
             <span class="glyphicon glyphicon-filter"></span>
             Plugins
+          </a>
+        </li>
+        <li ng-class="{active: navCtrl.page.name == 'Overview'}">
+          <a href ng-click="navCtrl.toOverview()">
+            <span class="glyphicon glyphicon-stats"></span>
+            Stats
           </a>
         </li>
         <li ng-class="{active: navCtrl.page.name == 'Notifications'}">
