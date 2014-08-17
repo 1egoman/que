@@ -1,0 +1,20 @@
+<!-- calendar -->
+<div class="calendar" ng-show="servCtrl.current == 0 &amp;&amp; servCtrl.lookin == true" ng-controller="calendarController as calCtrl">
+
+  <div class='title'>
+    <button class='btn pull-left' ng-click="calCtrl.prev()">&laquo;</button>
+    <h1>{{calCtrl.eventsInMonth.title}}</h1>
+    <button class='btn pull-right' ng-click="calCtrl.next()">&raquo;</button>
+  </div>
+  <ul>
+    <li ng-repeat="day in calCtrl.eventsInMonth.month" ng-class="day.classes">
+      <span class='day'>{{day.day}}</span>
+      <ul>
+        <li ng-repeat="event in day.events" ng-class="event.color" class="event" data-toggle="popover" title="{{event.name}}" data-content="<strong>When:</strong> {{event.when}}<br/><strong>Where:</strong> {{event.where}}" event>
+          {{event.name}}
+          <span aria-hidden="true" ng-click="navCtrl.fillSearch('delete ' + event.name + ' from calendar on ' + event.when)">×</span>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</div>

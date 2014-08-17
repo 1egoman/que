@@ -216,6 +216,22 @@ app.directive('navHeader', function(){
   };
 });
 
+// calendar
+app.directive('serviceCalendar', function(){
+  return {
+    restrict: 'E',
+    templateUrl: "calendar.html"
+  };
+});
+
+// people
+app.directive('servicePeople', function(){
+  return {
+    restrict: 'E',
+    templateUrl: "people.html"
+  };
+});
+
 // register events
 app.directive('event', function() {
     return {

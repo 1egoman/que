@@ -22,6 +22,7 @@
   </head>
   <body ng-app="QueApp" ng-controller="navController as navCtrl">
 
+    <!-- page header -->
     <nav-header></nav-header>
 
 
@@ -84,7 +85,7 @@
           </ul>
         </div>
 
-        <!-- search -->
+        <!-- search page -->
         <div class="col-sm-9 col-sm-offset-3 main row" ng-show='navCtrl.page.name == "Search"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
           
           <!-- main area -->
@@ -180,89 +181,14 @@
             <div ng-bind-html="serviceHtmlString"></div>
 
             <!-- builtin calendar -->
-            <div class="calendar" ng-show="servCtrl.current == 0 &amp;&amp; servCtrl.lookin == true" ng-controller="calendarController as calCtrl">
-
-              <div class='title'>
-                <button class='btn pull-left' ng-click="calCtrl.prev()">&laquo;</button>
-                <h1>{{calCtrl.eventsInMonth.title}}</h1>
-                <button class='btn pull-right' ng-click="calCtrl.next()">&raquo;</button>
-              </div>
-              <ul>
-                <li ng-repeat="day in calCtrl.eventsInMonth.month" ng-class="day.classes">
-                  <span class='day'>{{day.day}}</span>
-                  <ul>
-                    <li ng-repeat="event in day.events" ng-class="event.color" class="event" data-toggle="popover" title="{{event.name}}" data-content="<strong>When:</strong> {{event.when}}<br/><strong>Where:</strong> {{event.where}}" event>
-                      {{event.name}}
-                      <span aria-hidden="true" ng-click="navCtrl.fillSearch('delete ' + event.name + ' from calendar on ' + event.when)">×</span>
-                    </li>
-                  </ul>
-                </li>
-              </ul>
-            </div>
+            <service-calendar></service-calendar>
 
             <!-- builtin people -->
-            <div class="people" ng-show="servCtrl.current == 1 &amp;&amp; servCtrl.lookin == true" ng-controller="peopleController as peopCtrl">
-
-
-              <!-- tag list -->            
-              <div class="col-md-2 sidebar nested">
-                <div class="sidebar-header">Tags</div>
-
-                <ul class="nav nav-sidebar">
-                  <li ng-class="{'active': peopCtrl.tag == -1}" ng-click="peopCtrl.chooseTag(-1)"><a href>All</a></li>
-                  <li ng-repeat="tag in peopCtrl.getAllTags()" ng-click="peopCtrl.chooseTag($index)" ng-class="{'active': peopCtrl.tag == $index}">
-                    <a href>{{tag}}</a>
-                  </li>
-                </ul>
-
-              </div>
-
-              <!-- people list -->
-              <div class="col-sm-3 col-md-2 sidebar nested second">
-                <div class="sidebar-header">People</div>
-                <!-- <div class="sidebar-header">root.allTags[root.tag]</div> -->
-
-                <ul class="nav nav-sidebar">
-                  <li ng-repeat="p in peopCtrl.getPeopleForList()" ng-click="peopCtrl.person = p" ng-class="{'active': peopCtrl.person == p}">
-                    <a href>{{p.name.join(' ')}}</a>
-                  </li>
-                </ul>
-
-              </div>
-
-              <div class="col-sm-8 col-md-7 third main" ng-show="peopCtrl.person !== undefined">
-                <h1 style="padding-bottom: 20px;">{{peopCtrl.person.name.join(' ')}}</h1>
-
-                <!-- the information groups -->
-                <div class="personinfo well" ng-repeat="(title, contents) in peopCtrl.person.groups">
-                  
-                  <!-- title -->
-                  <h1>{{ title.spacify().capitalize(true) }}</h1>
-                  
-                  <!-- items -->
-                  <ul>
-                    <li ng-repeat="(name, value) in contents">
-                      <strong>{{ name.spacify().capitalize(true) }}</strong>: 
-                      <a href="//{{value.url}}" ng-show="value.url">{{value.text}}</a>
-                      <span ng-hide="value.url">{{value.text}}</span>
-
-                      <!-- possible other types -->
-                      <div class="phone-number" ng-show="value.type == 'phone-number'">
-                        <a class="call btn btn-success btn-xs" href="tel:{{value.text}}">Call</a>
-                        <a class="sms btn btn-success btn-xs" href="sms:{{value.text}}">Text</a>
-                      </div>
-
-                    </li>
-                  </ul>
-
-                </div>
-              </div>
-
-            </div>
+            <service-people></service-people>
 
             <!-- builtin service settings -->
             <div class="service-settings" ng-show="servCtrl.current < 0 &amp;&amp; servCtrl.lookin == true" ng-controller="serviceSettingsController as ssCtrl">
-              f
+              service settings will go here
             </div>
 
           </div>
