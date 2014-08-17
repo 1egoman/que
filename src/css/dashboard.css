@@ -89,12 +89,3 @@ a, a:hover {
 .main.services-inner {
   position: relative;
 }
-
-
-div.personinfo h1 {
-  font-size: 1.5em;
-}
-div.personinfo ul {
-  list-style-type: none;
-  padding-left: 10px;
-}

@@ -1,5 +1,10 @@
 var app = angular.module("QueApp", []);
 
+// add sms and tel prefixes
+app.config(['$compileProvider', function( $compileProvider ) {   
+  $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|tel|sms):/);
+}]);
+
 // controls user navigation (what page they are on)
 app.controller('navController', function($http) {
 
