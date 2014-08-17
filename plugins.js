@@ -63,6 +63,9 @@ exports.loadAll = function() {
         } else {
           // otherwise, must be a regular expression
           resp = plugin.validate.test(query)// || false
+
+          // strangely, this line is necessary
+          plugin.validate.test(query)
         }
 
         // are we done?
