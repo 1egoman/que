@@ -21,7 +21,7 @@ exports.queries = [
     validate: function(query) {
 
       // must match one of these
-      return query.has("day") || query.has("date")
+      return /\bday\b/gi.test(query) || /\bdate\b/gi.test(query)
     },
     then: function(query, services) {
 
@@ -29,13 +29,13 @@ exports.queries = [
       when = services.query.whenParser(query) || Date.create()
 
       // give the date that was requested
-      if ( query.has(' day ') ) {
+      if ( /\bday\b/gi.test(query) ) {
         // ex: monday
         return "Today is a " + when.format('{Weekday}')
 
-      } else if ( query.has(' date ') ) {
+      } else if ( /\bdate\b/gi.test(query) ) {
         // ex: June 5 2014
-        return "Today is  " + when.format('{Month} {d}, {yyyy}')
+        return "Today's date is " + when.format('{Month} {d}, {yyyy}')
       }
 
 
