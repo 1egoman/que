@@ -116,7 +116,7 @@ http.createServer(function (req, res) {
         resp = all.validateFor(body.query.text)
 
         // if query was successful then get the data and respond
-        if (resp) {
+        if (resp != false) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
 
           out = resp.then(body.query.text, all.services)
