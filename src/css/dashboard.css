@@ -21,7 +21,7 @@ a, a:hover {
 }
 @media (min-width: 768px) {
   .sidebar {
-    position: fixed;
+    position: absolute;
     top: 51px;
     bottom: 0;
     left: 0;
@@ -35,19 +35,9 @@ a, a:hover {
   }
 
   .sidebar.nested {
-    left: 212px;
     border-left: 2px solid rgba(66, 139, 202, 0.25);
   }
-
-  .sidebar.nested.second {
-    left: 424px;
-  }
-
-  .third.main {
-    left: 404px;
-    margin-left: 20px;
-  }
-
+  
   .sidebar div.sidebar-header {
     font-size: 1.5em;
     color: #BBB;

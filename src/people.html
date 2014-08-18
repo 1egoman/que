@@ -1,9 +1,9 @@
-<div class="people" ng-show="servCtrl.current == 1 &amp;&amp; servCtrl.lookin == true" ng-controller="peopleController as peopCtrl">
+<div class="people row" ng-show="servCtrl.current == 1 &amp;&amp; servCtrl.lookin == true" ng-controller="peopleController as peopCtrl">
 
 
 
   <!-- tag list -->            
-  <div class="col-md-2 sidebar nested">
+  <div class="col-md-2 col-lg-2 col-sm-2 sidebar nested">
     <div class="sidebar-header">Tags</div>
 
     <ul class="nav nav-sidebar">
@@ -18,7 +18,7 @@
 
 
   <!-- people list -->
-  <div class="col-sm-3 col-md-2 sidebar nested second">
+  <div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-2 col-sm-3 col-md-2 sidebar nested second">
     <div class="sidebar-header">People</div>
     <!-- <div class="sidebar-header">root.allTags[root.tag]</div> -->
 
@@ -32,7 +32,7 @@
 
 
   <!-- person's information -->
-  <div class="col-sm-8 col-md-7 third main" ng-show="peopCtrl.person !== undefined">
+  <div class="col-sm-8 col-md-7 col-sm-offset-5 col-md-offset-4 col-lg-offset-4 main" ng-show="peopCtrl.person !== undefined">
     <h1 style="padding-bottom: 20px;">{{peopCtrl.person.name.join(' ')}}</h1>
 
     <!-- the information groups -->

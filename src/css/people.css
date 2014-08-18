@@ -21,3 +21,8 @@ div.personinfo > ul > li {
 div.phone-number {
   display: inline;
 }
+
+.people {
+  width: 100%;
+  height: 100%;
+}

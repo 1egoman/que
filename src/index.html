@@ -30,7 +30,7 @@
       <div class="row" ng-controller="serviceController as servCtrl">
 
         <!-- services sidebar -->
-        <div class="col-md-2 sidebar sidebar-services" ng-show="navCtrl.page.name == 'Services'">
+        <div class="col-md-2 col-sm-2 sidebar sidebar-services" ng-show="navCtrl.page.name == 'Services'">
 
           <ul class="nav nav-sidebar builtin">
 
@@ -172,7 +172,7 @@
         </div>
 
         <!-- services -->
-        <div class="col-sm-9 col-sm-offset-3 main row" ng-show='navCtrl.page.name == "Services"' 
+        <div class="col-sm-9 col-sm-offset-2 main row" ng-show='navCtrl.page.name == "Services"' 
         ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
 
           <div class="services-inner">
