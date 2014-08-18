@@ -102,6 +102,8 @@ http.createServer(function (req, res) {
     // query
     if (pth[0] == "api" && pth[1] == "query") {
       var body = '';
+
+      // a data chunk
       req.on('data', function(chunk) {
         body += chunk.toString();
 
@@ -109,8 +111,15 @@ http.createServer(function (req, res) {
         if (body.length > 1e6)
           req.connection.destroy();
       });
+
+      // end of request
       req.on('end', function() {
         body = JSON.parse(body);
+
+        // sort all plugins based on priority
+        all.all = all.all.sortBy(function(n) {
+          return n.priority || 0
+        })
 
         // do query
         resp = all.validateFor(body.query.text)
@@ -119,8 +128,16 @@ http.createServer(function (req, res) {
         if (resp != false) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
 
+
           // get the plugin's response
-          resp.then(body.query.text, all.services, function( out ) {
+          resp.then(body.query.text, all.services, function(out, err) {
+
+            // failed request
+            if (out == false) {
+              res.end( JSON.stringify({ERROR: err || null}) )
+            }
+
+            // create packet
             if (typeof out == "string") {
               out = {"OK": out}
             }
@@ -132,6 +149,8 @@ http.createServer(function (req, res) {
             // end of query
             res.end( JSON.stringify(out) );
           })
+
+
         } else {
           // no plugin's matched the query
           res.end( JSON.stringify({NOHIT: null}) )
