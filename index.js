@@ -115,21 +115,25 @@ http.createServer(function (req, res) {
         // do query
         resp = all.validateFor(body.query.text)
 
-        // if query was successful then get the data and respond
+        // if query was successful, continue
         if (resp != false) {
           res.writeHead(200, { 'Content-Type': 'application/json' });
 
-          out = resp.then(body.query.text, all.services)
-          if (typeof out == "string") {
-            out = {"OK": out}
-          }
+          // get the plugin's response
+          resp.then(body.query.text, all.services, function( out ) {
+            if (typeof out == "string") {
+              out = {"OK": out}
+            }
 
-          // add to history
-          hist = {packet: out, when: new Date(), query: body}
-          history.push(hist)
+            // add to history
+            hist = {packet: out, when: new Date(), query: body}
+            history.push(hist)
 
-          res.end( JSON.stringify(out) );
+            // end of query
+            res.end( JSON.stringify(out) );
+          })
         } else {
+          // no plugin's matched the query
           res.end( JSON.stringify({NOHIT: null}) )
         }
       });

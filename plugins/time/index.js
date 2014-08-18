@@ -4,7 +4,7 @@ fs = require('fs');
 exports.queries = [
   {
     validate: /time/gi,
-    then: function(query, services) {
+    then: function(query, services, callback) {
 
       // parse when this is happening
       when = services.query.whenParser(query) || Date.create()
@@ -23,7 +23,7 @@ exports.queries = [
       // must match one of these
       return /\bday\b/gi.test(query) || /\bdate\b/gi.test(query)
     },
-    then: function(query, services) {
+    then: function(query, services, callback) {
 
       // parse when this is happening
       when = services.query.whenParser(query) || Date.create()
@@ -31,11 +31,11 @@ exports.queries = [
       // give the date that was requested
       if ( /\bday\b/gi.test(query) ) {
         // ex: monday
-        return "Today is a " + when.format('{Weekday}')
+        callback( "Today is a " + when.format('{Weekday}') )
 
       } else if ( /\bdate\b/gi.test(query) ) {
         // ex: June 5 2014
-        return "Today's date is " + when.format('{Month} {d}, {yyyy}')
+        callback( "Today's date is " + when.format('{Month} {d}, {yyyy}') )
       }
 
 

@@ -4,10 +4,10 @@ fs = require('fs');
 exports.queries = [
   {
     validate: /(cal|calendar)/gi,
-    then: function(query, services) {
+    then: function(query, services, callback) {
 
       // a calendar-based event
-      return services.query.childParentCallback(query, function(query, type, cp, when) {
+      callback(services.query.childParentCallback(query, function(query, type, cp, when) {
         
         // create new calendar service instance
         cal = new services.calendar(services)
@@ -31,7 +31,7 @@ exports.queries = [
             return "No response for this action"
             break
         }
-      })
+      }))
     }
   }
 ]
