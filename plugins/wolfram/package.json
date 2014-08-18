@@ -1,0 +1,12 @@
+{
+  "name": "Wolfram",
+  "description": "Wolfram Alpha queries",
+  "version": "0.0.1",
+  "author": {
+    "name": "Ryan Gaus",
+    "twitter": "@rgausnet"
+  },
+  "dependencies": {
+    "wolfram": "0.3.x"
+  }
+}
