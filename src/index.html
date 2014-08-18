@@ -198,6 +198,8 @@
         <div class="col-sm-9 col-sm-offset-3 main" ng-show='navCtrl.page.id == "search"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
           <h1 class="page-header">Search</h1>
           <h1> -> "{{navCtrl.page.results}}"</h1>
+          <h2 style="margin-top: 20px;" ng-show="navCtrl.page.data.image">Image</h2>
+          <img src="{{navCtrl.page.data.image || ''}}"/>
         </div>
 
       </div>

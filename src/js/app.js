@@ -68,7 +68,8 @@ app.controller('navController', function($http) {
         name: "Search Results",
         id: "search",
         sidebar: false,
-        results: data.OK || data.ERR || data.NOHIT
+        results: data.OK || data.ERR || data.NOHIT,
+        data: data
       }
     });
 
