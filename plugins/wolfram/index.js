@@ -19,30 +19,35 @@ exports.queries = [
           return item.title == 'Response' || !item.title.has('Input')
         })
 
-        queryText = primary.subpods[0].value.replace('\n', ';;')
+        if (primary) {
+          queryText = primary.subpods[0].value.replace('\n', ';;')
 
-        // do some formatting
-        if ( queryText.has('|') ) {
+          // do some formatting
+          if ( queryText.has('|') ) {
 
-          // split the query
-          splitQuery = queryText.split(";;")
-          splitQuery.each(function(i, ct){
+            // split the query
+            splitQuery = queryText.split(";;")
+            splitQuery.each(function(i, ct){
 
-            // get key and value
-            key = i.split('|')[0]
-            value = i.split('|')[1]
+              // get key and value
+              key = i.split('|')[0]
+              value = i.split('|')[1]
 
-            // format it a little better
-            splitQuery[ct] = "The " + key + " is " + value + ". "
+              // format it a little better
+              splitQuery[ct] = "The " + key + " is " + value + ". "
+            })
+
+            queryText = splitQuery.join('')
+          }
+
+          callback({
+            OK: queryText,
+            image: primary.subpods[0].image || null
           })
 
-          queryText = splitQuery.join('')
+        } else {
+          callback({NOHIT: null})
         }
-
-        callback({
-          OK: queryText,
-          image: primary.subpods[0].image || null
-        })
       })
 
     }
