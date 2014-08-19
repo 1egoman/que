@@ -33,7 +33,12 @@
 
   <!-- person's information -->
   <div class="col-sm-8 col-md-7 col-sm-offset-5 col-md-offset-4 col-lg-offset-4 main" ng-show="peopCtrl.person !== undefined">
-    <h1 style="padding-bottom: 20px;">{{peopCtrl.person.name.join(' ')}}</h1>
+    <h1 style="padding: 25px 0px 20px;">
+      {{peopCtrl.person.name.join(' ')}}
+      <small>
+        {{ peopCtrl.person.tags.join(', ') }}
+      </small>
+    </h1>
 
     <!-- the information groups -->
     <div class="personinfo well" ng-repeat="(title, contents) in peopCtrl.person.groups">
