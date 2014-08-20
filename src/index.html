@@ -56,7 +56,10 @@
           <!-- show all services in list -->
           <ul class="nav nav-sidebar">
             <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == false}' ng-repeat="srv in servCtrl.services">
-              <a href ng-click="servCtrl.changeService($index)">{{srv.title}}</a>
+              <a href ng-click="servCtrl.changeService($index)">
+                <span ng-show="srv.html.icon" class="glyphicon {{ srv.html.icon }}"></span>
+                {{srv.title}}
+              </a>
             </li>
           </ul>
         </div>

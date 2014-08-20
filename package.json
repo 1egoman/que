@@ -7,10 +7,13 @@
     "minimist": "0.2.x",
     "curry": "1.2.x",
     "mime": "1.2.x",
-    "jake": "latest"
+    "tap": "0.4.x"
   },
   "author": {
     "name": "Ryan Gaus",
     "twitter": "@rgausnet"
+  },
+  "scripts": {
+    "test": "tap ./test"
   }
 }

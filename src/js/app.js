@@ -85,8 +85,9 @@ app.controller('navController', function($http) {
 
 });
 
+
 // for services
-app.controller('serviceController', function($scope, $sce, $http){
+app.controller('serviceController', function($scope, $sce, $http, $compile){
 
   // services arrays
   this.services = [];
@@ -129,7 +130,7 @@ app.controller('serviceController', function($scope, $sce, $http){
 
     // change active html
     serviceHtml = this.getActiveService().html
-    $scope.serviceHtmlString = $sce.trustAsHtml(serviceHtml);
+    $scope.serviceHtmlString = $sce.trustAsHtml( serviceHtml.html || serviceHtml );
   }
 
   // show settings page
@@ -171,6 +172,8 @@ app.controller('serviceController', function($scope, $sce, $http){
   this.reloadServices();
 
 });
+
+
 
 // manages query history
 app.controller("HistorianController", function($http, $interval){
