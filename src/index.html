@@ -182,7 +182,7 @@
           <div class="services-inner">
           
             <!-- all non-builtin services are inserted here -->
-            <div ng-bind-html="serviceHtmlString"></div>
+            <user-service></user-service>
 
             <!-- builtin calendar -->
             <service-calendar></service-calendar>
@@ -252,6 +252,10 @@
     <script type="text/javascript" src="js/calendar.js"></script>
     <script type="text/javascript" src="js/people.js"></script>
     <script type="text/javascript" src="js/notifications.js"></script>
+
+    <!-- custom service javascript -->
+    <script ng-bind-html="serviceJsString"></script>
+
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
 

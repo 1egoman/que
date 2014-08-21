@@ -104,6 +104,7 @@ app.controller('serviceController', function($scope, $sce, $http, $compile){
   this.lookin = true;
 
   var root = this;
+  var body = angular.element(document.getElementsByTagName('body')[0])
 
   // get reference to active service (from builtins or normal services)
   this.getActiveService = function() {
@@ -140,7 +141,16 @@ app.controller('serviceController', function($scope, $sce, $http, $compile){
 
     // change active html
     serviceHtml = this.getActiveService().html
-    $scope.serviceHtmlString = $sce.trustAsHtml( serviceHtml.html || serviceHtml );
+    $scope.serviceHtmlString = serviceHtml.html
+
+  }
+
+  this.getAllJavascriptFromServices = function() {
+    var js = '';
+    this.services.each(function(service){
+      js += (service.html.js || '') + '\n'
+    })
+    return js
   }
 
   // show settings page
@@ -176,6 +186,10 @@ app.controller('serviceController', function($scope, $sce, $http, $compile){
 
       // update services
       root.changeService(0, true);
+
+      // and javascript
+      js = root.getAllJavascriptFromServices()
+      body.append("<script>" + js + "</script>" );
     });
   };
   // reload services
@@ -243,6 +257,23 @@ app.directive('servicePeople', function(){
   return {
     restrict: 'E',
     templateUrl: "people.html"
+  };
+});
+
+// forr user-made services
+app.directive('userService', function ( $compile ) {
+  return {
+    scope: true,
+    link: function ( scope, element, attrs ) {
+      var el;
+      scope.$watch( 'serviceHtmlString', function ( tpl ) {
+        if ( angular.isDefined( tpl ) ) {
+          // compile the provided template against the current scope
+          element.html(scope.serviceHtmlString);
+          $compile(element.contents())(scope);
+        }
+      });
+    }
   };
 });
 
