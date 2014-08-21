@@ -6,7 +6,7 @@
   <div class="col-md-2 col-lg-2 col-sm-2 sidebar nested">
     <div class="sidebar-header">Tags</div>
 
-    <ul class="nav nav-sidebar">
+    <ul class="nav nav-pills nav-stacked">
       <li ng-class="{'active': peopCtrl.tag == -1}" ng-click="peopCtrl.chooseTag(-1)"><a href>All</a></li>
       <li ng-repeat="tag in peopCtrl.getAllTags()" ng-click="peopCtrl.chooseTag($index)" ng-class="{'active': peopCtrl.tag == $index}">
         <a href>{{tag}}</a>
@@ -22,7 +22,7 @@
     <div class="sidebar-header">People</div>
     <!-- <div class="sidebar-header">root.allTags[root.tag]</div> -->
 
-    <ul class="nav nav-sidebar">
+    <ul class="nav nav-pills nav-stacked">
       <li ng-repeat="p in peopCtrl.getPeopleForList()" ng-click="peopCtrl.person = p" ng-class="{'active': peopCtrl.person == p}">
         <a href>{{p.name.join(' ')}}</a>
       </li>

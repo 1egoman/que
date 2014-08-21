@@ -33,7 +33,7 @@
         <!-- services sidebar -->
         <div class="col-md-2 col-sm-2 sidebar sidebar-services" ng-show="navCtrl.page.name == 'Services'">
 
-          <ul class="nav nav-sidebar builtin">
+          <ul class="nav nav-pills nav-stacked">
 
             <!-- a builtin service -->
             <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == true }' ng-repeat="srv in servCtrl.builtins">
@@ -55,7 +55,7 @@
 
 
           <!-- show all services in list -->
-          <ul class="nav nav-sidebar">
+          <ul class="nav nav-pills nav-stacked">
             <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == false}' ng-repeat="srv in servCtrl.services">
               <a href ng-click="servCtrl.changeService($index)">
                 <span ng-show="srv.html.icon" class="glyphicon {{ srv.html.icon }}"></span>
@@ -68,7 +68,7 @@
         <!-- plugins sidebar -->
         <div class="col-md-2 sidebar sidebar-services" ng-show="navCtrl.page.name == 'Plugins'">
 
-          <ul class="nav nav-sidebar builtin">
+          <ul class="nav nav-pills nav-stacked builtin">
 
             <!-- service settings -->
             <li ng-class='{active:servCtrl.current == -1 &amp;&amp; servCtrl.lookin == true }'>
@@ -82,7 +82,7 @@
 
 
           <!-- show all services in list -->
-          <ul class="nav nav-sidebar">
+          <ul class="nav nav-pills nav-stacked">
             <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == false}' ng-repeat="srv in servCtrl.services">
               <a href ng-click="servCtrl.changeService($index)">{{srv.title}}</a>
             </li>
