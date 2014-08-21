@@ -43,9 +43,10 @@
           </a>
         </li>
         <li ng-class="{active: navCtrl.page.name == 'Notifications'}">
-          <a href ng-click="navCtrl.toPlugins()">
+          <a href ng-click="navCtrl.toNotifications()">
             <span class="glyphicon glyphicon-th-list"></span>
             Notifications
+            <span class="badge primary">{{allNotifications.length == 0 ? '' : allNotifications.length}}</span>
           </a>
         </li>
       </ul>

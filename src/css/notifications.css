@@ -1,0 +1,92 @@
+div.notif-list {
+  background: #f5f5f5;
+  /*color: rgb(65, 170, 205);*/
+
+  position: absolute;
+  top: 50px;
+  bottom: 0px;
+  padding: 0px 10px;
+
+  overflow: hidden;
+}
+
+div.notif-list ul {
+  padding: 0px;
+}
+
+div.notif-list .notif:first-child {
+  margin-top: 20px;
+}
+
+
+.notif {
+  display: block;
+
+  width: 100%;
+  min-height: 75px;
+  padding: 10px 20px;
+  margin: 10px 0px;
+  border: 1px solid #DCDCDC;
+  border-radius: 4px;
+  box-shadow: 0px 1px 4px #CCC;
+
+  background: #FFF;
+
+  position: relative;
+  cursor: pointer;
+}
+
+.notif button.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.notif > p {
+  margin: 16px 0px;
+}
+
+.notif.labeled:before {
+  content: " ";
+  display: block;
+
+  width: 4px;
+  min-height: 75px;
+  background: #AAA;
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+
+  position: absolute;
+  top: -1px;
+  left: 0px;
+}
+
+.notif.labeled.primary:before {
+  background: rgb(65, 170, 205);
+}
+
+.notif.labeled.success:before {
+  background: #64cc41;
+}
+
+.notif.labeled.warn:before {
+  background: #D6C563;
+}
+
+.notif.labeled.error:before {
+  background: #cc6441;
+}
+
+
+div.nothing span.glyphicon {
+  font-size: 128px;
+
+  width: 128px;
+  margin: 40px auto;
+  display: block;
+}
+
+div.nothing .caption {
+  font-size: 2.2em;
+  text-align: center;
+}

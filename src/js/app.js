@@ -55,6 +55,16 @@ app.controller('navController', function($http) {
 
   };
 
+  this.toNotifications = function() {
+    // set page data
+    this.page = {
+      name: "Notifications",
+      id: "main-notifications",
+      sidebar: false
+    }
+
+  };
+
   // perform a server query
   this.search = function() {
     $http({
