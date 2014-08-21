@@ -35,7 +35,7 @@ http.createServer(function (req, res) {
           // loop through services
           out = []
           Object.keys(all.services).each(function(name){
-            console.log( all.services[name] );
+            // console.log( all.services[name] );
 
             if (typeof all.services[name] == "function") {
               srv = new all.services[name]();
@@ -43,15 +43,16 @@ http.createServer(function (req, res) {
               srv = all.services[name]
             }
 
+            item = {name: name, title: name.capitalize(), html: null}
+
             if ( srv.getServicesPage ) {
-              code = {name: name, title: name.capitalize(), html: srv.getServicesPage()}
-            } else {
-              code = {name: name, title: name.capitalize(), html: null}
+              item.html = srv.getServicesPage()
             }
+            out.push(item)
 
-            out.push(code)
+
+
           })
-
           res.end( JSON.stringify(out) )
 
         } else if (pth[1] == "service") {
