@@ -1,9 +1,9 @@
 angular.module("QueApp").controller('notificationsController', function($scope, $rootScope){
   $rootScope.allNotifications = [
-    {
-      content: "What time is it?",
-      icon: "glyphicon-time"
-    }
+    // {
+    //   content: "What time is it?",
+    //   icon: "glyphicon-time"
+    // }
   ]
 
   console.log($scope)

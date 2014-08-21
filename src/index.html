@@ -203,7 +203,7 @@
         <div class="main row col-md-12 col-xs-11" ng-show='navCtrl.page.id == "main-notifications"' ng-controller="notificationsController as notifCtrl">
           
           <!-- the list -->
-          <div class="notif-list col-md-3 col-md-offset-1 col-sm-4 col-xs-11">
+          <div class="notif-list col-md-4 col-md-offset-4 col-sm-4 col-xs-11">
             <ul>
 
               <li class="notif {{all.color}} {{all.color ? 'labeled' : ''}}" ng-repeat="one in allNotifications">
@@ -218,10 +218,12 @@
               </li>
 
             </ul>
+
             <div class="nothing" ng-show="allNotifications == 0">
               <span class="glyphicon glyphicon-bell"></span>
               <p class="caption">No notifications</p>
             </div>
+
           </div>
 
         </div>
