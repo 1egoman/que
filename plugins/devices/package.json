@@ -1,0 +1,10 @@
+{
+  "name": "Devices",
+  "description": "Manages device information",
+  "version": "0.0.1",
+  "author": {
+    "name": "Ryan Gaus",
+    "twitter": "@rgausnet"
+  },
+  "dependencies": {}
+}

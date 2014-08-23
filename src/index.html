@@ -65,29 +65,7 @@
           </ul>
         </div>
 
-        <!-- plugins sidebar -->
-        <div class="col-md-2 sidebar sidebar-services" ng-show="navCtrl.page.name == 'Plugins'">
 
-          <ul class="nav nav-pills nav-stacked builtin">
-
-            <!-- service settings -->
-            <li ng-class='{active:servCtrl.current == -1 &amp;&amp; servCtrl.lookin == true }'>
-              <a href ng-click="servCtrl.showSettings()">
-                <span class="glyphicon glyphicon-cog"></span>
-                Settings
-              </a>
-            </li>
-
-          </ul>
-
-
-          <!-- show all services in list -->
-          <ul class="nav nav-pills nav-stacked">
-            <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == false}' ng-repeat="srv in servCtrl.services">
-              <a href ng-click="servCtrl.changeService($index)">{{srv.title}}</a>
-            </li>
-          </ul>
-        </div>
 
         <!-- search page -->
         <div class="col-sm-9 col-sm-offset-3 main row" ng-show='navCtrl.page.name == "Search"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
@@ -199,6 +177,55 @@
         </div>
 
 
+        <!-- devices -->
+        <div class="main row col-md-12 col-xs-11" ng-show='navCtrl.page.id == "main-devices"' ng-controller="DeviceController as DevCtrl">
+          <div class=" col-md-6 col-md-offset-3" style="margin-top: 30px;">
+            <div class="panel panel-default">
+              <!-- Default panel contents -->
+              <div class="panel-heading">My Devices</div>
+
+
+              <!-- devices list -->
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>IP</th>
+                    <th>Tags</th>
+                    <th></th>
+                  </tr>
+                <tbody>
+                  <tr ng-repeat="dev in DevCtrl.devices">
+                    <td>{{dev.name}}</td>
+                    <td>{{dev.ip}}</td>
+                    <td>
+                      <span class="label label-default" ng-repeat="name in dev.tags" style="margin: 10px 2px;">{{name}}</span>
+                    </td>
+                  </tr>
+
+                  <tr>
+                    <form method="get">
+                      <td>
+                        <input type="text" name="name" class="form-control" placeholder="Name" ng-model="currentDevice.name"/>
+                      </td>
+                      <td>
+                        <input type="text" name="ip" class="form-control" placeholder="IP Address" ng-model="currentDevice.ip"/>
+                      </td>
+                      <td>
+                        <input type="text" name="tags" class="form-control" placeholder="Tags (put spaces between them)" ng-model="currentDevice.tags"/>
+                      </td>
+                      <td>
+                        <button class="btn btn-primary" ng-click="DevCtrl.addDevice(currentDevice)">Add</button>
+                      </td>
+                    </form>
+                  </tr>
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+
         <!-- notifications -->
         <div class="main row col-md-12 col-xs-11" ng-show='navCtrl.page.id == "main-notifications"' ng-controller="notificationsController as notifCtrl">
           
@@ -252,6 +279,7 @@
     <script type="text/javascript" src="js/calendar.js"></script>
     <script type="text/javascript" src="js/people.js"></script>
     <script type="text/javascript" src="js/notifications.js"></script>
+    <script type="text/javascript" src="js/devices.js"></script>
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>

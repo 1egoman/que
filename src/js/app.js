@@ -45,12 +45,12 @@ app.controller('navController', function($http) {
 
   };
 
-  this.toPlugins = function() {
+  this.toDevices = function() {
     // set page data
     this.page = {
-      name: "Plugins",
-      id: "main-plugins",
-      sidebar: true
+      name: "Devices",
+      id: "main-devices",
+      sidebar: false
     }
 
   };
