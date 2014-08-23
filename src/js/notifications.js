@@ -6,7 +6,6 @@ angular.module("QueApp").controller('notificationsController', function($scope, 
     // }
   ]
 
-  console.log($scope)
 
   // remove notification
   this.dismiss = function(one) {
