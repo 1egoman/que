@@ -201,6 +201,12 @@
                     <td>
                       <span class="label label-default" ng-repeat="name in dev.tags" style="margin: 10px 2px;">{{name}}</span>
                     </td>
+                    <td>
+                      <button type="button" class="close" ng-click="DevCtrl.delDevice(dev)">
+                        <span aria-hidden="true">&times;</span>
+                        <span class="sr-only">Close</span>
+                      </button>
+                    </td>
                   </tr>
 
                   <tr>
