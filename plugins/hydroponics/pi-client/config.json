@@ -1,0 +1,7 @@
+{
+  "gpiopump": 16,
+  "pumptimer": {
+    "when": "12:00:00",
+    "length": 10
+  }
+}
