@@ -1,0 +1,9 @@
+{
+  "people": [
+    {
+      "name": ["John", "Smith"],
+      "tags": ["family", "friends"],
+      "groups": {}
+    }
+  ]
+}
