@@ -11,9 +11,9 @@ exports.queries = [
 
       //cannot give time in the future or past
       if ( when.is('today') ) {
-        return "The time is " + when.format('{12hr}:{mm}{tt}')
+        callback("The time is " + when.format('{12hr}:{mm}{tt}'))
       } else {
-        return "I cannot tell the future, nor the past!"
+        callback("I cannot tell the future, nor the past!")
       }
     }
   },
