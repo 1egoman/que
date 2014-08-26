@@ -93,43 +93,54 @@ app.post("/api/query", function(req, res, next) {
   req.on('end', function() {
     body = JSON.parse(body); // parse the body
 
-    // sort all plugins based on priority
-    all.all = all.all.sortBy(function(n) {
-      return n.priority || 0
-    })
+    // create callback object
+    var callbackObject = function(text, err, callback) {
 
-    // do query
-    resp = all.validateFor(body.query.text)
+      // failed request
+      if (text == false) {
+        res.send( {ERROR: err || null} )
+      }
 
-    // if query was successful, continue
-    if (resp != false) {
+      // create packet, if it isn't already
+      if (typeof text == "string") {
+        packet = {"OK": text, "complete": callback != undefined}
+      }
 
-      // get the plugin's response
-      resp.then(body.query.text, all.services, function(out, err) {
+      // add to history
+      hist = {packet: packet, when: new Date(), query: body, complete: callback == undefined, callback: callback}
+      history.push(hist)
 
-        // failed request
-        if (out == false) {
-          res.send( {ERROR: err || null} )
-        }
+      // end of query
+      res.send(packet);
+    }
 
-        // create packet, if it isn't already
-        if (typeof out == "string") {
-          packet = {"OK": out}
-        }
+    if (history.length == 0 || history[history.length-1].complete == true) {
 
-        // add to history
-        hist = {packet: packet, when: new Date(), query: body}
-        history.push(hist)
-
-        // end of query
-        res.send(packet);
+      // sort all plugins based on priority
+      all.all = all.all.sortBy(function(n) {
+        return n.priority || 0
       })
 
+      // do query
+      resp = all.validateFor(body.query.text)
+
+      // if query was successful, continue
+      if (resp != false) {
+
+        // get the plugin's response
+        resp.then(body.query.text, all.services, callbackObject)
+
+      } else {
+        // no plugin's matched the query
+        res.end( {NOHIT: null} )
+      }
 
     } else {
-      // no plugin's matched the query
-      res.end( {NOHIT: null} )
+      // otherwise, just run the callback
+      history[history.length-1].callback(body.query.text, null, callbackObject)
     }
+
+
   });
 });
 
@@ -141,16 +152,15 @@ app.get("*", function(req, res) {
 
     // default of index.html
     if ( p.split('.').length == 1 ) { 
-      p += "/index.html" 
+      p += "index.html" 
     }
 
-    // try to go to that path
-    var cnt = fs.readFileSync("src/"+p).toString()
-    res.writeHead(200, { 'Content-Type': mime.lookup(p) });
-    res.end(cnt);
+    // try to send that path
+    res.sendFile(__dirname + "/src/" + p)
   } catch(err) {
-    res.writeHead(404, '');
-    res.end("doesn't exist")
+    var err = new Error();
+    err.status = 404;
+    next(err);
   }
 });
 
@@ -178,5 +188,6 @@ app.use(function(err, req, res, next) {
 
 
 var server = app.listen(process.env.PORT || 8000, function() {
+  console.log("Que is ready!")
   console.log('Listening on port %d', server.address().port);
 });

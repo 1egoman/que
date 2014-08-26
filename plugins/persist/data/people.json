@@ -1,6 +1,44 @@
 {
   "people": [
     {
+      "name": ["Ryan", "Gaus"],
+      "tags": ["me", "family"],
+      "groups": {
+
+        "phone": {
+          "cell": {
+            "text": "3154640001",
+            "type": "phone-number"
+          },
+          "home": {
+            "text": "3156385420",
+            "type": "phone-number"
+          }
+        },
+
+        "web": {
+          "home": {
+            "text": "rgaus.net",
+            "url": "rgaus.net"
+          }
+
+        },
+
+        "social": {
+          "twitter": {
+            "text": "@rgausnet",
+            "url": "twitter.com/rgausnet"
+          },
+          "google-plus": {
+            "text": "+Ryan Gaus",
+            "url": "plus.google.com/u/0/+RyanGaus/"
+          }
+        }
+
+
+      }
+    },
+    {
       "name": ["John", "Smith"],
       "tags": ["family", "friends"],
       "groups": {}
