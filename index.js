@@ -143,7 +143,7 @@ app.post("/api/query", function(req, res, next) {
       if (hist.status && hist.status.type == "boolean") {
 
         // do a boolean operation
-        trueStuff = ["yes", "true", "yea", "yep", "yay", "correct"]
+        trueStuff = ["yes", "true", "yea", "yep", "yay", "correct", "ok", "sure"]
         falseStuff = ["no", "false", "nope", "ney", "nay", "incorrect"]
 
         ifTrue = body.query.text.split(' ').intersect(trueStuff).length > 0
