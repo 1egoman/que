@@ -103,7 +103,9 @@ app.post("/api/query", function(req, res, next) {
 
       // create packet, if it isn't already
       if (typeof text == "string") {
-        packet = {"OK": text, "complete": callback != undefined}
+        packet = {"OK": text, "complete": callback == undefined}
+      } else {
+        packet = text;
       }
 
       // add to history
@@ -132,7 +134,7 @@ app.post("/api/query", function(req, res, next) {
 
       } else {
         // no plugin's matched the query
-        res.end( {NOHIT: null} )
+        res.end( "{NOHIT: null}" )
       }
 
     } else {
