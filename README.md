@@ -1,4 +1,4 @@
-que
+![Que](https://cdn.rawgit.com/1egoman/que/master/src/img/logo-black.svg "Que")
 ===
 
 Note: run `npm install` in the root and in each plugin folder (in /plugins/*) before running `node index.js`
