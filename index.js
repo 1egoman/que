@@ -94,11 +94,11 @@ app.post("/api/query", function(req, res, next) {
     body = JSON.parse(body); // parse the body
 
     // create callback object
-    var callbackObject = function(text, err, callback) {
+    var callbackObject = function(text, status, callback) {
 
       // failed request
       if (text == false) {
-        res.send( {ERROR: err || null} )
+        res.send( {ERROR: status || null} )
       }
 
       // create packet, if it isn't already
@@ -107,7 +107,7 @@ app.post("/api/query", function(req, res, next) {
       }
 
       // add to history
-      hist = {packet: packet, when: new Date(), query: body, complete: callback == undefined, callback: callback}
+      hist = {packet: packet, when: new Date(), query: body, complete: callback == undefined, callback: callback, starus: status}
       history.push(hist)
 
       // end of query
@@ -137,7 +137,27 @@ app.post("/api/query", function(req, res, next) {
 
     } else {
       // otherwise, just run the callback
-      history[history.length-1].callback(body.query.text, null, callbackObject)
+      hist = history[history.length-1]
+      if (hist.status && hist.status.type == "boolean") {
+
+        // do a boolean operation
+        trueStuff = ["yes", "true", "yea", "yep", "yay", "correct"]
+        falseStuff = ["no", "false", "nope", "ney", "nay", "incorrect"]
+
+        ifTrue = body.query.text.split(' ').intersect(trueStuff).length > 0
+        ifFalse = body.query.text.split(' ').intersect(falseStuff).length > 0
+
+        if (ifTrue && !ifFalse) {
+          hist.callback(true, null, callbackObject)
+        } else if (!ifTrue && ifFalse) {
+          hist.callback(false, null, callbackObject)
+        } else {
+          hist.callback(body.query.text, null, callbackObject)
+        }
+
+      } else {
+        hist.callback(body.query.text, null, callbackObject)
+      }
     }
 
 
