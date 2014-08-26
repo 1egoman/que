@@ -94,6 +94,14 @@
               </div>
 
             </form>
+
+            <div style="margin-top: 20px; color: #888;" ng-controller="HistorianController as HistCtrl">
+              <span ng-repeat="item in HistCtrl.history.last(5)">
+                <span class="pull-left" style="width: 100%; font-size: 1.2em;">"{{item.query.query.text}}"</span>
+                <span class="pull-right">"{{item.packet.OK}}"</span>
+              </span>
+            </div>
+
           </div>
         </div>
 

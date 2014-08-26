@@ -200,7 +200,7 @@ app.controller('serviceController', function($scope, $sce, $http, $compile){
 
 
 // manages query history
-app.controller("HistorianController", function($http, $interval){
+app.controller("HistorianController", function($http, $interval, $log){
   
   // history
   this.history = []
@@ -216,7 +216,6 @@ app.controller("HistorianController", function($http, $interval){
 
     return request;
   }
-
 
   // reload history
   this.reload = function() {
