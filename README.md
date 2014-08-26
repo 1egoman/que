@@ -3,6 +3,40 @@ que
 
 Note: run `npm install` in the root and in each plugin folder (in /plugins/*) before running `node index.js`
 
+
+
+API Explaination
+===
+
+- `GET /api/services` Get a list of all services. Will return an array of objects in the form of:
+```json
+{
+  "name": "internal service name",
+  "title": "user-presented name",
+  "html": "html page for plugin, or null"
+}
+```
+- `GET /api/service/[serviceName]` Get service-defined information returned from the service's `this.getData` function, exactly like how it was returned only JSON stringified
+
+- `GET /api/history` Get a command history since the server was started
+
+- `POST /api/query` Send a query. At a minimum, the query's POST body must contain:
+```json
+{
+  "query": {
+    "text": "Query text"
+  }
+}
+```
+As a response, you'll get:
+```json
+{
+  "OK": "Query response",
+  "img": "Associated image"
+}
+```
+("OK" can also be "ERR" for an error, or "NOHIT" for an error where a search failed, ex: a faild wolfram alpha query)
+
 Licence
 ===
 
