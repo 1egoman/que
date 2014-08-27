@@ -81,3 +81,20 @@ a, a:hover {
 .main.services-inner {
   position: relative;
 }
+
+
+/* the search history */
+div.search-history {
+  margin-top: 20px; 
+  color: #888;
+}
+
+div.search-history span span:last-child {
+  font-size: 1.4em;
+  color: #444;
+}
+
+/* the last, most current result should be bigger */
+div.search-history span:last-child span:last-child {
+  font-size: 2em;
+}

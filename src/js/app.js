@@ -74,13 +74,13 @@ app.controller('navController', function($http) {
       headers: { 'Content-Type': 'application/json' }  // pass as json
     }).success(function(data) {
       this.searchData = ''
-      root.page = {
-        name: "Search Results",
-        id: "search",
-        sidebar: false,
-        results: data.OK || data.ERR || data.NOHIT,
-        data: data
-      }
+      // root.page = {
+      //   name: "Search Results",
+      //   id: "search",
+      //   sidebar: false,
+      //   results: data.OK || data.ERR || data.NOHIT,
+      //   data: data
+      // }
     });
 
   }.throttle(100)
