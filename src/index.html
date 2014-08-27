@@ -95,8 +95,8 @@
 
             </form>
 
-            <div class="search-history well clearfix" ng-controller="HistorianController as HistCtrl" ng-show="HistCtrl.history.length">
-              <span ng-repeat="item in HistCtrl.history.last(5)">
+            <div class="search-history well clearfix" ng-show="navCtrl.miniHistory.length">
+              <span ng-repeat="item in navCtrl.miniHistory.last(5)">
                 <span class="pull-left" style="width: 100%; font-size: 1.2em;">"{{item.query.query.text}}"</span>
                 <span class="pull-right">"{{item.packet.OK}}"</span>
               </span>

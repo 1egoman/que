@@ -10,6 +10,7 @@ app.controller('navController', function($http) {
 
   // current page information
   this.page = {}
+  this.miniHistory = []
 
   this.searchData = ""
   var root = this;
@@ -73,14 +74,9 @@ app.controller('navController', function($http) {
       data: JSON.stringify({ query:{text: this.searchData} }),
       headers: { 'Content-Type': 'application/json' }  // pass as json
     }).success(function(data) {
-      this.searchData = ''
-      // root.page = {
-      //   name: "Search Results",
-      //   id: "search",
-      //   sidebar: false,
-      //   results: data.OK || data.ERR || data.NOHIT,
-      //   data: data
-      // }
+      console.log(this.searchData)
+      root.miniHistory.push({query: { query:{text: root.searchData} }, packet: data})
+      root.searchData = ''
     });
 
   }.throttle(100)
@@ -92,6 +88,14 @@ app.controller('navController', function($http) {
     this.toSearch()
     $("input.search-box").focus()
   }
+
+  // get all the previous history
+  $http({
+    method: "get",
+    url: "api/history"
+  }).success(function(data){
+    root.miniHistory = data.history
+  });
 
 });
 
