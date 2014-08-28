@@ -6,6 +6,9 @@ require('sugar');
 // plugin loader
 var plugins = require("./plugins")
 
+// config
+var config = JSON.parse( fs.readFileSync(__dirname + "/config.json").toString() )
+
 // get args
 var argv = require('minimist')(process.argv.slice(2));
 var express = require('express')
@@ -109,7 +112,7 @@ app.post("/api/query", function(req, res, next) {
       }
 
       // add to history
-      hist = {packet: packet, when: new Date(), query: body, complete: callback == undefined, callback: callback, starus: status}
+      hist = {packet: packet, when: new Date(), query: body, complete: callback == undefined, callback: callback, status: status}
       history.push(hist)
 
       // end of query
@@ -143,12 +146,10 @@ app.post("/api/query", function(req, res, next) {
       if (hist.status && hist.status.type == "boolean") {
 
         // do a boolean operation
-        trueStuff = ["yes", "true", "yea", "yep", "yay", "correct", "ok", "sure"]
-        falseStuff = ["no", "false", "nope", "ney", "nay", "incorrect"]
+        ifTrue = body.query.text.split(' ').intersect(config.trueWords).length > 0
+        ifFalse = body.query.text.split(' ').intersect(config.falseWords).length > 0
 
-        ifTrue = body.query.text.split(' ').intersect(trueStuff).length > 0
-        ifFalse = body.query.text.split(' ').intersect(falseStuff).length > 0
-
+        // check it
         if (ifTrue && !ifFalse) {
           hist.callback(true, null, callbackObject)
         } else if (!ifTrue && ifFalse) {
@@ -209,7 +210,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-var server = app.listen(process.env.PORT || 8000, function() {
+var server = app.listen(config.port || 8000, function() {
   console.log("Que is ready!")
   console.log('Listening on port %d', server.address().port);
 });

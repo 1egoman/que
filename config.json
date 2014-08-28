@@ -1,0 +1,6 @@
+{
+  "port": 8000,
+
+  "trueWords": ["yes", "true", "yea", "yep", "yay", "correct", "ok", "sure"],
+  "falseWords": ["no", "false", "nope", "ney", "nay", "incorrect"]
+}
