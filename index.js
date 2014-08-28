@@ -133,7 +133,8 @@ app.post("/api/query", function(req, res, next) {
       if (resp != false) {
 
         // get the plugin's response
-        resp.then(body.query.text, all.services, callbackObject)
+        body.ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+        resp.then(body.query.text, all.services, callbackObject, body)
 
       } else {
         // no plugin's matched the query
