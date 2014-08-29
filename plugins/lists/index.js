@@ -6,11 +6,18 @@ exports.queries = [
     validate: /(list)/gi,
     then: function(query, services, callback) {
 
+      var lists = new services.lists(services);
+
+      if (query == "all lists") {
+        return callback(lists.get().map(function(n){
+          return n.name
+        }).join(", "));
+      }
+
       services.query.childParentCallback(query, function(query, type, cp, when) {
 
         // create list name from parent name
         var listName = (cp.parent || '').replace("list", '').replace("my", '').trim();
-        var lists = new services.lists(services);
 
         // perform the correct action
         switch (type) {
@@ -46,7 +53,7 @@ exports.queries = [
             var listName = (query || '').replace("list", '').replace("my", '').trim();
 
             // get the list
-            item = lists.get().find(function(n){ return n.name == listName }) || null;
+            item = lists.get().find(function(n){ return n.name == listName }) || callback("No list named "+listName);
             callback(  listName+" list: "+item.items.join(", ")  );
             break
         }

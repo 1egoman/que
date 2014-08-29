@@ -12,6 +12,8 @@
     <link rel="stylesheet" type="text/css" href="css/calendar.css">
     <link rel="stylesheet" type="text/css" href="css/people.css">
     <link rel="stylesheet" type="text/css" href="css/notifications.css">
+    <link rel="stylesheet" type="text/css" href="css/automation.css">
+    <link rel="stylesheet" type="text/css" href="css/toggle-switch.css">
 
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -176,6 +178,9 @@
             <!-- builtin people -->
             <service-people></service-people>
 
+            <!-- builtin automation -->
+            <service-automation></service-automation>
+
             <!-- builtin service settings -->
             <div class="service-settings" ng-show="servCtrl.current < 0 &amp;&amp; servCtrl.lookin == true">
               service settings will go here
@@ -294,10 +299,11 @@
     <script type="text/javascript" src="js/people.js"></script>
     <script type="text/javascript" src="js/notifications.js"></script>
     <script type="text/javascript" src="js/devices.js"></script>
+    <script type="text/javascript" src="js/automation.js"></script>
 
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="bootstrap/js/bootstrap.min.js"></script>
-    <script src="js/chart.min.js"></script>
+    <!--<script src="js/chart.min.js"></script>-->
 
     <script>
       // hide any popovers

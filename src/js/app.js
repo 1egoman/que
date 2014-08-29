@@ -184,8 +184,13 @@ app.controller('serviceController', function($scope, $sce, $http, $compile){
         name: "people",
         title: "People",
         html: "builtin",
-
         icon: "glyphicon-user"
+      },
+      {
+        name: "lists",
+        title: "Lists",
+        html: "builtin",
+        icon: "glyphicon-flash"
       }]
 
       // update services
@@ -260,6 +265,14 @@ app.directive('servicePeople', function(){
   return {
     restrict: 'E',
     templateUrl: "people.html"
+  };
+});
+
+// people
+app.directive('serviceAutomation', function(){
+  return {
+    restrict: 'E',
+    templateUrl: "automation.html"
   };
 });
 
