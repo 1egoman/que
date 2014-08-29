@@ -263,19 +263,8 @@ exports.services = {
     */
     childParentCallback: function(query, callback) {
 
-      // addition?
-      if ( /(add|new|put)/gi.test(query) ) {
-
-        // parse query
-        childParent = exports.services.query.assumeAddition( query )
-        
-        // try whenparser to get the time in the query
-        when = exports.services.query.whenParser(query) || new Date()
-
-        return callback(query, "addition", childParent, when)
-
-      // creation?
-      } else if ( /(create|construct|spawn|establish)/gi.test(query) ) {
+        // creation?
+        if ( /(create|construct|spawn|establish)/gi.test(query) ) {
 
         // parse query
         childParent = exports.services.query.assumeCreation( query )
@@ -307,9 +296,26 @@ exports.services = {
 
         return callback(query, "deletion", childParent, when)
 
+      // addition?
+      } else if ( /(add|new|put)/gi.test(query) ) {
+
+        // parse query
+        childParent = exports.services.query.assumeAddition( query )
+        
+        // try whenparser to get the time in the query
+        when = exports.services.query.whenParser(query) || new Date()
+
+        return callback(query, "addition", childParent, when)
+
       // none of the above
       } else {
-        return false
+        // parse query
+        childParent = exports.services.query.assumeAddition( query )
+        
+        // try whenparser to get the time in the query
+        when = exports.services.query.whenParser(query) || new Date()
+
+        return callback(query, null, childParent, when)
       }
     }
   }
