@@ -1,0 +1,32 @@
+div.automation {
+  margin-top: 30px;
+  width: 100%;
+}
+
+div.automation ul {
+  list-style-type: none;
+
+  max-width: 500px;
+  margin: 0px auto;
+}
+
+div.automation ul li {
+  max-width: 100%;
+}
+
+.switch {
+  max-width: 500px;
+  cursor: pointer;
+}
+
+div.automation div.row div.col-md-9, div.automation div.row div.col-md-3 {
+  padding: 3px;
+}
+
+div.automation div.row.addition {
+  opacity: 0.5;
+}
+
+div.automation div.row.addition:hover {
+  opacity: 1;
+}

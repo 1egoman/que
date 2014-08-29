@@ -1,0 +1,60 @@
+<div class="automation row" ng-controller="listController as autoCtrl" ng-show="servCtrl.current == 2 &amp;&amp; servCtrl.lookin == true">
+  <ul>
+    <li>
+
+      <!-- add new list -->
+      <div class="panel panel-primary">
+        <div class="panel-heading">Add New List</div>
+        <div class="panel-body">
+
+          <!-- add new item -->
+          <div class="row">
+            <div class="col-md-9">
+              <input class="form-control" type="text" placeholder="Name" ng-model="autoCtrl.getLastRoom().name" />
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-primary pull-left col-md-11" ng-click="autoCtrl.publishRoom()">Add List</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </li>
+    <li ng-repeat="list in autoCtrl.lists" ng-show="list.name !== ''">
+
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          {{list.name}}
+          <span class="pull-right glyphicon glyphicon-remove" ng-click="autoCtrl.lists.remove(list)"></span>
+          <span class="pull-right glyphicon glyphicon-unchecked" ng-click="autoCtrl.turnAll($index, false);" title="All Off"></span>
+          <span class="pull-right glyphicon glyphicon-check" ng-click="autoCtrl.turnAll($index, true);" title="All On"></span>
+        </div>
+        <div class="panel-body">
+
+          <div class="item" ng-repeat="item in list.items" ng-show="item.name.length">
+
+            <!-- switch -->
+            <input type="checkbox" ng-model="item.state" />
+            <label>{{item.name}}</label>
+
+          </div>
+
+
+          <!-- add new item -->
+          <div class="addition row">
+            <div class="col-md-9">
+              <input class="form-control" type="text" placeholder="Name" ng-model="autoCtrl.getLastItem(list).name" />
+            </div>
+            <div class="col-md-3">
+              <button class="btn btn-primary pull-left col-md-11" ng-click="autoCtrl.publishItem(list)">Add Item</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </li>
+  </ul>
+
+</div>
