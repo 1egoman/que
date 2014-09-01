@@ -18,6 +18,10 @@ query.init(all, config);
 // get args
 var argv = require('minimist')(process.argv.slice(2));
 
+// auth
+var auth = require("./lib/auth");
+auth.init(config);
+
 // set up the express app
 var express = require('express')
 var app = express();
@@ -85,26 +89,17 @@ app.post("/api/auth", function(req, res, next) {
   // end of request
   req.on('end', function() {
 
-    // parse and provide some error correction
-    body = JSON.parse(body || '{}'); // parse the body
-    if (!body.password && !argv.dev) {
-      res.send({ERR: "No Password provided"});
-      return
+    // parse the body, and get the client's ip
+    body = JSON.parse(body || '{}');
+    ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+
+    // check authentication
+    if (auth.authenticate(body, ip, argv.dev) == true) {
+      res.send( auth.check(ip, argv.dev) );
+    } else {
+      res.send({ERR: "Bad Password"})
     }
 
-    // check the information (or, in developer mode)
-    if ( argv.dev || config.password.slice(1) == sha256(body.password) ) {
-      // success!
-      res.send({
-        status: "OK",
-        username: config.user.first_name || "User",
-        rights: 0,
-        dev: argv.dev
-      });
-    } else {
-      // fail
-      res.send({ERR: "Bad Password"});
-    }
 
   });
 
