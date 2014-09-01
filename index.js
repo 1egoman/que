@@ -48,8 +48,33 @@ app.get("/api/service/:service", function(req, res, next) {
   }
 });
 
+// authentication request
+app.post("/api/auth", function(req, res, next) {
+  var body = '';
+  
+  // a data chunk
+  req.on('data', function(chunk) {
+    body += chunk.toString();
+
+    // Too much POST data, kill the connection!
+    if (body.length > 1e6)
+      req.connection.destroy();
+  });
+
+  // end of request
+  req.on('end', function() {
+    body = JSON.parse(body || '{}'); // parse the body
+    res.send({
+      status: "OK",
+      username: "Qube",
+      rights: 0
+    });
+  });
+
+});
+
 // get all services
-app.get("/api/services", function(req, res) {
+app.get("/api/services", function(req, res, next) {
 
   out = []
   Object.keys(all.services).each(function(name){
@@ -94,7 +119,7 @@ app.post("/api/query", function(req, res, next) {
 
   // end of request
   req.on('end', function() {
-    body = JSON.parse(body); // parse the body
+    body = JSON.parse(body || '{}'); // parse the body
 
     // create callback object
     var callbackObject = function(text, status, callback) {
@@ -169,7 +194,7 @@ app.post("/api/query", function(req, res, next) {
 });
 
 // a normal page
-app.get("*", function(req, res) {
+app.get("*", function(req, res, next) {
   // try and render a page
   p = req.url.substr(1).split('?')[0];
   try {
