@@ -1,6 +1,7 @@
 var http = require('http'),
     fs = require("fs"),
-    mime = require("mime");
+    mime = require("mime"),
+    sha256 = require("sha256");
 require('sugar');
 
 // plugin loader
@@ -19,6 +20,12 @@ var all = plugins.loadAll();
 
 // query history
 var history = []
+
+// check config (underscore signifies hashed password)
+if ( !config.password.startsWith('_') ) {
+  config.password = '_' + sha256(config.password);
+  console.log("Hashed password in config file")
+}
 
 
 // get a specific service's information

@@ -1,5 +1,10 @@
 {
   "port": 8000,
+  "password": "1234",
+  "user_info": {
+    "first_name": "John",
+    "last_name": "Smith"
+  },
 
   "trueWords": ["yes", "true", "yea", "yep", "yay", "correct", "ok", "sure"],
   "falseWords": ["no", "false", "nope", "ney", "nay", "incorrect"]
