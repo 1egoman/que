@@ -20,7 +20,7 @@ app.controller('userController', function($http, $scope) {
   $scope.failedLogin = false;
 
   // login to Que
-  this.login = function(username, password) {
+  this.login = function(password) {
 
     // use pre-defined values if not specified
     password = password || root.password;
