@@ -21,263 +21,272 @@
       ">">https://oss.maxcdn.com/respond/1.4.2/respond.min.js">
     <![endif]-->
   </head>
-  <body ng-app="QueApp" ng-controller="navController as navCtrl">
+  <body ng-app="QueApp" ng-controller="userController as userCtrl">
 
-    <!-- page header -->
-    <nav-header></nav-header>
+    <!-- login view -->
+    <div class="login">
+      <login-page></login-page>
+    </div>
 
+    <!-- the main app view -->
+    <div ng-controller="navController as navCtrl" ng-show="currentUser">
 
-    <div class="container-fluid">
-      <div class="row" ng-controller="serviceController as servCtrl">
-
-        <!-- services sidebar -->
-        <div class="col-md-2 col-sm-2 sidebar sidebar-services" ng-show="navCtrl.page.name == 'Services'">
-
-          <ul class="nav nav-pills nav-stacked">
-
-            <!-- a builtin service -->
-            <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == true }' ng-repeat="srv in servCtrl.builtins">
-              <a href ng-click="servCtrl.changeService($index, true)">
-                <span class="glyphicon {{ srv.icon }}"></span>
-                {{srv.title}}
-              </a>
-            </li>
-
-            <!-- service settings -->
-            <li ng-class='{active:servCtrl.current == -1 &amp;&amp; servCtrl.lookin == true }'>
-              <a href ng-click="servCtrl.showSettings()">
-                <span class="glyphicon glyphicon-cog"></span>
-                Settings
-              </a>
-            </li>
-
-          </ul>
+      <!-- page header -->
+      <nav-header></nav-header>
 
 
-          <!-- show all services in list -->
-          <ul class="nav nav-pills nav-stacked">
-            <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == false}' ng-repeat="srv in servCtrl.services">
-              <a href ng-click="servCtrl.changeService($index)">
-                <span ng-show="srv.html.icon" class="glyphicon {{ srv.html.icon }}"></span>
-                {{srv.title}}
-              </a>
-            </li>
-          </ul>
-        </div>
+      <div class="container-fluid">
+        <div class="row" ng-controller="serviceController as servCtrl">
 
+          <!-- services sidebar -->
+          <div class="col-md-2 col-sm-2 sidebar sidebar-services" ng-show="navCtrl.page.name == 'Services'">
 
+            <ul class="nav nav-pills nav-stacked">
 
-        <!-- search page -->
-        <div class="col-sm-9 col-sm-offset-3 main row" ng-show='navCtrl.page.name == "Search"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
-          
-          <!-- main area -->
-          <div class="col-sm-4 col-sm-offset-4 col-md-6 col-sm-offset-3" style="padding-top: 36px;">
-            <form>
-              <!-- logo -->
-              <img src="img/logo-black.svg" class="center-block" style="margin: 30px auto;" />
+              <!-- a builtin service -->
+              <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == true }' ng-repeat="srv in servCtrl.builtins">
+                <a href ng-click="servCtrl.changeService($index, true)">
+                  <span class="glyphicon {{ srv.icon }}"></span>
+                  {{srv.title}}
+                </a>
+              </li>
 
-              <!-- search box -->
-              <div class="input-group">
-
-                <!-- the textbox -->
-                <input type="text" class="form-control" placeholder="Send Query" 
-                ng-model="navCtrl.searchData" style="width: 100%; height: 4em;" x-webkit-speech/>
-
-                <!-- dummy button -->
-                <button ng-click="navCtrl.search()" class="btn" ng-hide="1">Go</button>
-
-                <!-- search button -->
-                <span class="input-group-addon" ng-click="navCtrl.search()" style="cursor: pointer;">
-                  <span class="glyphicon glyphicon-chevron-right"></span>
-                </span>
-
-              </div>
-
-            </form>
-
-            <div class="search-history well clearfix" ng-show="navCtrl.miniHistory.length">
-              <span ng-repeat="item in navCtrl.miniHistory.last(5)">
-                <span class="pull-left" style="width: 100%; font-size: 1.2em;">"{{item.query.query.text}}"</span>
-                <span class="pull-right">"{{item.packet.OK}}"</span>
-              </span>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- overview -->
-        <div class="col-sm-9 col-sm-offset-3 main" ng-show='navCtrl.page.name == "Overview"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
-          <h1 class="page-header">Que Statistics</h1>
-          
-          <div class="row">
-
-            <!-- History -->
-            <div class="col-md-6" ng-controller="HistorianController as HistCtrl">
-              <div class="panel panel-info">
-                <div class="panel-heading">
-                  <h3 class="panel-title">
-                    Query History
-                    <span class="glyphicon glyphicon-refresh pull-right" ng-click="HistCtrl.reload()"></span>
-                  </h3>
-                </div>
-                <table class="table" ng-hide="HistCtrl.history.length == 0">
-                  <thead>
-                    <tr>
-                      <th>Query Text</th>
-                      <th>Response</th>
-                      <th>When</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr ng-repeat="item in HistCtrl.history">
-                      <td>'{{ item.query.query.text }}'</td>
-                      <td>{{ item.packet }}</td>
-                      <td>{{ item.when }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-                <div class="panel-body" ng-show="HistCtrl.history.length == 0">
-                  There are no queries in Que's history.
-                </div>
-              </div>
-            </div>
-
-
-
-            <!-- load monitor -->
-            <div class="col-md-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <h3 class="panel-title">Server Load</h3>
-                </div>
-                <div class="panel-body">
-                  [Graph Here]
-                </div>
-              </div>
-            </div>
-
-
-
-          </div>
-        </div>
-
-        <!-- services -->
-        <div class="col-sm-9 col-sm-offset-2 main row" ng-show='navCtrl.page.name == "Services"' 
-        ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
-
-          <div class="services-inner">
-          
-            <!-- all non-builtin services are inserted here -->
-            <user-service></user-service>
-
-            <!-- builtin calendar -->
-            <service-calendar></service-calendar>
-
-            <!-- builtin people -->
-            <service-people></service-people>
-
-            <!-- builtin service settings -->
-            <div class="service-settings" ng-show="servCtrl.current < 0 &amp;&amp; servCtrl.lookin == true">
-              service settings will go here
-            </div>
-
-          </div>
-        </div>
-
-
-        <!-- devices -->
-        <div class="main row col-md-12 col-xs-11" ng-show='navCtrl.page.id == "main-devices"' ng-controller="DeviceController as DevCtrl">
-          <div class=" col-md-6 col-md-offset-3" style="margin-top: 30px;">
-            <div class="panel panel-default">
-              <!-- Default panel contents -->
-              <div class="panel-heading">My Devices</div>
-
-
-              <!-- devices list -->
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>IP</th>
-                    <th>Tags</th>
-                    <th></th>
-                  </tr>
-                <tbody>
-                  <tr ng-repeat="dev in DevCtrl.devices">
-                    <td>{{dev.name}}</td>
-                    <td>{{dev.ip}}</td>
-                    <td>
-                      <span class="label label-default" ng-repeat="name in dev.tags" style="margin: 10px 2px;">{{name}}</span>
-                    </td>
-                    <td>
-                      <button type="button" class="close" ng-click="DevCtrl.delDevice(dev)">
-                        <span aria-hidden="true">&times;</span>
-                        <span class="sr-only">Close</span>
-                      </button>
-                    </td>
-                  </tr>
-
-                  <tr>
-                    <form method="get">
-                      <td>
-                        <input type="text" name="name" class="form-control" placeholder="Name" ng-model="currentDevice.name"/>
-                      </td>
-                      <td>
-                        <input type="text" name="ip" class="form-control" placeholder="IP Address" ng-model="currentDevice.ip"/>
-                      </td>
-                      <td>
-                        <input type="text" name="tags" class="form-control" placeholder="Tags (put spaces between them)" ng-model="currentDevice.tags"/>
-                      </td>
-                      <td>
-                        <button class="btn btn-primary" ng-click="DevCtrl.addDevice(currentDevice)">Add</button>
-                      </td>
-                    </form>
-                  </tr>
-                </tbody>
-              </table>
-
-            </div>
-          </div>
-        </div>
-
-        <!-- notifications -->
-        <div class="main row col-md-12 col-xs-11" ng-show='navCtrl.page.id == "main-notifications"' ng-controller="notificationsController as notifCtrl">
-          
-          <!-- the list -->
-          <div class="notif-list col-md-4 col-md-offset-4 col-sm-4 col-xs-11">
-            <ul>
-
-              <li class="notif {{all.color}} {{all.color ? 'labeled' : ''}}" ng-repeat="one in allNotifications">
-                <p>{{one.content}}</p>
-
-                <!-- close button -->
-                <button type="button" class="close" ng-click="notifCtrl.dismiss(one)">
-                  <span aria-hidden="true">&times;</span>
-                  <span class="sr-only">Close</span>
-                </button>
-
+              <!-- service settings -->
+              <li ng-class='{active:servCtrl.current == -1 &amp;&amp; servCtrl.lookin == true }'>
+                <a href ng-click="servCtrl.showSettings()">
+                  <span class="glyphicon glyphicon-cog"></span>
+                  Settings
+                </a>
               </li>
 
             </ul>
 
-            <div class="nothing" ng-show="allNotifications == 0">
-              <span class="glyphicon glyphicon-bell"></span>
-              <p class="caption">No notifications</p>
+
+            <!-- show all services in list -->
+            <ul class="nav nav-pills nav-stacked">
+              <li ng-class='{active:servCtrl.current == $index &amp;&amp; servCtrl.lookin == false}' ng-repeat="srv in servCtrl.services">
+                <a href ng-click="servCtrl.changeService($index)">
+                  <span ng-show="srv.html.icon" class="glyphicon {{ srv.html.icon }}"></span>
+                  {{srv.title}}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+
+
+          <!-- search page -->
+          <div class="col-sm-9 col-sm-offset-3 main row" ng-show='navCtrl.page.name == "Search"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
+            
+            <!-- main area -->
+            <div class="col-sm-4 col-sm-offset-4 col-md-6 col-sm-offset-3" style="padding-top: 36px;">
+              <form>
+                <!-- logo -->
+                <img src="img/logo-black.svg" class="center-block" style="margin: 30px auto;" />
+
+                <!-- search box -->
+                <div class="input-group">
+
+                  <!-- the textbox -->
+                  <input type="text" class="form-control" placeholder="Send Query" 
+                  ng-model="navCtrl.searchData" style="width: 100%; height: 4em;" x-webkit-speech/>
+
+                  <!-- dummy button -->
+                  <button ng-click="navCtrl.search()" class="btn" ng-hide="1">Go</button>
+
+                  <!-- search button -->
+                  <span class="input-group-addon" ng-click="navCtrl.search()" style="cursor: pointer;">
+                    <span class="glyphicon glyphicon-chevron-right"></span>
+                  </span>
+
+                </div>
+
+              </form>
+
+              <div class="search-history well clearfix" ng-show="navCtrl.miniHistory.length">
+                <span ng-repeat="item in navCtrl.miniHistory.last(5)">
+                  <span class="pull-left" style="width: 100%; font-size: 1.2em;">"{{item.query.query.text}}"</span>
+                  <span class="pull-right">"{{item.packet.OK}}"</span>
+                </span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- overview -->
+          <div class="col-sm-9 col-sm-offset-3 main" ng-show='navCtrl.page.name == "Overview"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
+            <h1 class="page-header">Que Statistics</h1>
+            
+            <div class="row">
+
+              <!-- History -->
+              <div class="col-md-6" ng-controller="HistorianController as HistCtrl">
+                <div class="panel panel-info">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">
+                      Query History
+                      <span class="glyphicon glyphicon-refresh pull-right" ng-click="HistCtrl.reload()"></span>
+                    </h3>
+                  </div>
+                  <table class="table" ng-hide="HistCtrl.history.length == 0">
+                    <thead>
+                      <tr>
+                        <th>Query Text</th>
+                        <th>Response</th>
+                        <th>When</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="item in HistCtrl.history">
+                        <td>'{{ item.query.query.text }}'</td>
+                        <td>{{ item.packet }}</td>
+                        <td>{{ item.when }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="panel-body" ng-show="HistCtrl.history.length == 0">
+                    There are no queries in Que's history.
+                  </div>
+                </div>
+              </div>
+
+
+
+              <!-- load monitor -->
+              <div class="col-md-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title">Server Load</h3>
+                  </div>
+                  <div class="panel-body">
+                    [Graph Here]
+                  </div>
+                </div>
+              </div>
+
+
+
+            </div>
+          </div>
+
+          <!-- services -->
+          <div class="col-sm-9 col-sm-offset-2 main row" ng-show='navCtrl.page.name == "Services"' 
+          ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
+
+            <div class="services-inner">
+            
+              <!-- all non-builtin services are inserted here -->
+              <user-service></user-service>
+
+              <!-- builtin calendar -->
+              <service-calendar></service-calendar>
+
+              <!-- builtin people -->
+              <service-people></service-people>
+
+              <!-- builtin service settings -->
+              <div class="service-settings" ng-show="servCtrl.current < 0 &amp;&amp; servCtrl.lookin == true">
+                service settings will go here
+              </div>
+
+            </div>
+          </div>
+
+
+          <!-- devices -->
+          <div class="main row col-md-12 col-xs-11" ng-show='navCtrl.page.id == "main-devices"' ng-controller="DeviceController as DevCtrl">
+            <div class=" col-md-6 col-md-offset-3" style="margin-top: 30px;">
+              <div class="panel panel-default">
+                <!-- Default panel contents -->
+                <div class="panel-heading">My Devices</div>
+
+
+                <!-- devices list -->
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>IP</th>
+                      <th>Tags</th>
+                      <th></th>
+                    </tr>
+                  <tbody>
+                    <tr ng-repeat="dev in DevCtrl.devices">
+                      <td>{{dev.name}}</td>
+                      <td>{{dev.ip}}</td>
+                      <td>
+                        <span class="label label-default" ng-repeat="name in dev.tags" style="margin: 10px 2px;">{{name}}</span>
+                      </td>
+                      <td>
+                        <button type="button" class="close" ng-click="DevCtrl.delDevice(dev)">
+                          <span aria-hidden="true">&times;</span>
+                          <span class="sr-only">Close</span>
+                        </button>
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <form method="get">
+                        <td>
+                          <input type="text" name="name" class="form-control" placeholder="Name" ng-model="currentDevice.name"/>
+                        </td>
+                        <td>
+                          <input type="text" name="ip" class="form-control" placeholder="IP Address" ng-model="currentDevice.ip"/>
+                        </td>
+                        <td>
+                          <input type="text" name="tags" class="form-control" placeholder="Tags (put spaces between them)" ng-model="currentDevice.tags"/>
+                        </td>
+                        <td>
+                          <button class="btn btn-primary" ng-click="DevCtrl.addDevice(currentDevice)">Add</button>
+                        </td>
+                      </form>
+                    </tr>
+                  </tbody>
+                </table>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- notifications -->
+          <div class="main row col-md-12 col-xs-11" ng-show='navCtrl.page.id == "main-notifications"' ng-controller="notificationsController as notifCtrl">
+            
+            <!-- the list -->
+            <div class="notif-list col-md-4 col-md-offset-4 col-sm-4 col-xs-11">
+              <ul>
+
+                <li class="notif {{all.color}} {{all.color ? 'labeled' : ''}}" ng-repeat="one in allNotifications">
+                  <p>{{one.content}}</p>
+
+                  <!-- close button -->
+                  <button type="button" class="close" ng-click="notifCtrl.dismiss(one)">
+                    <span aria-hidden="true">&times;</span>
+                    <span class="sr-only">Close</span>
+                  </button>
+
+                </li>
+
+              </ul>
+
+              <div class="nothing" ng-show="allNotifications == 0">
+                <span class="glyphicon glyphicon-bell"></span>
+                <p class="caption">No notifications</p>
+              </div>
+
             </div>
 
           </div>
 
+
+          <!-- search results -->
+          <div class="col-sm-9 col-sm-offset-3 main" ng-show='navCtrl.page.id == "search"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
+            <h1 class="page-header">Search</h1>
+            <h1> -> "{{navCtrl.page.results}}"</h1>
+            <h2 style="margin-top: 20px;" ng-show="navCtrl.page.data.image">Image</h2>
+            <img src="{{navCtrl.page.data.image || ''}}"/>
+          </div>
+
         </div>
-
-
-        <!-- search results -->
-        <div class="col-sm-9 col-sm-offset-3 main" ng-show='navCtrl.page.id == "search"' ng-class="{'col-md-10 col-md-offset-2': navCtrl.page.sidebar, 'col-md-12 col-md-offset-0': !navCtrl.page.sidebar}">
-          <h1 class="page-header">Search</h1>
-          <h1> -> "{{navCtrl.page.results}}"</h1>
-          <h2 style="margin-top: 20px;" ng-show="navCtrl.page.data.image">Image</h2>
-          <img src="{{navCtrl.page.data.image || ''}}"/>
-        </div>
-
       </div>
     </div>
 

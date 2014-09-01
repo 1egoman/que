@@ -5,6 +5,17 @@ app.config(['$compileProvider', function( $compileProvider ) {
   $compileProvider.aHrefSanitizationWhitelist(/^\s*(https?|ftp|mailto|chrome-extension|tel|sms):/);
 }]);
 
+// controls current logged in user
+app.controller('userController', function($http, $scope) {
+
+  // current, logged in user information
+  $scope.currentUser = null;
+
+  // the username and password
+  this.username = '';
+  this.password = '';
+});
+
 // controls user navigation (what page they are on)
 app.controller('navController', function($http) {
 
@@ -263,7 +274,15 @@ app.directive('servicePeople', function(){
   };
 });
 
-// forr user-made services
+// login
+app.directive('loginPage', function(){
+  return {
+    restrict: 'E',
+    templateUrl: "login.html"
+  };
+});
+
+// for user-made services
 app.directive('userService', function ( $compile ) {
   return {
     scope: true,
