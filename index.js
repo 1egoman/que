@@ -73,6 +73,31 @@ app.get("/api/service/:service", function(req, res, next) {
   }
 });
 
+// get all services
+app.get("/api/services", function(req, res, next) {
+
+  out = []
+  Object.keys(all.services).each(function(name){
+    // loop through each service
+
+    if (typeof all.services[name] == "function") {
+      srv = new all.services[name]();
+    } else {
+      srv = all.services[name]
+    }
+
+    // create record
+    item = {name: name, title: name.capitalize(), html: null}
+
+    if ( srv.getServicesPage ) {
+      item.html = srv.getServicesPage()
+    }
+    out.push(item);
+  })
+
+  res.send(out);
+});
+
 // authentication request
 app.post("/api/auth", function(req, res, next) {
   var body = '';
@@ -102,33 +127,7 @@ app.post("/api/auth", function(req, res, next) {
 
 
   });
-
 });
-
-// get all services
-app.get("/api/services", function(req, res, next) {
-
-  out = []
-  Object.keys(all.services).each(function(name){
-    // loop through each service
-
-    if (typeof all.services[name] == "function") {
-      srv = new all.services[name]();
-    } else {
-      srv = all.services[name]
-    }
-
-    // create record
-    item = {name: name, title: name.capitalize(), html: null}
-
-    if ( srv.getServicesPage ) {
-      item.html = srv.getServicesPage()
-    }
-    out.push(item);
-  })
-
-  res.send(out);
-})
 
 // get a specific service's information
 app.get("/api/history", function(req, res, next) {
