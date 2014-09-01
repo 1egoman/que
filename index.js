@@ -21,6 +21,9 @@ var all = plugins.loadAll();
 // query history
 var history = []
 
+// developer mode
+argv.dev && console.log(" * Started in developer mode (no auth)")
+
 // check config (underscore signifies hashed password)
 if ( !config.password.startsWith('_') ) {
 
@@ -84,8 +87,8 @@ app.post("/api/auth", function(req, res, next) {
       return
     }
 
-    // check the information
-    if ( config.password.slice(1) == sha256(body.password) ) {
+    // check the information (or, in developer mode)
+    if ( config.password.slice(1) == sha256(body.password) || argv.dev ) {
       // success!
       res.send({
         status: "OK",
