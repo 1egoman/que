@@ -1,3 +1,7 @@
+/**
+  index.js (https://github.com/1egoman/que)
+  This file ties together all the library's and contains the server code.
+*/
 var http = require('http'),
     fs = require("fs"),
     mime = require("mime"),
@@ -8,7 +12,7 @@ require('sugar');
 var config = JSON.parse( fs.readFileSync(__dirname + "/config.json").toString() )
 
 // plugin loader
-var plugins = require("./plugins")
+var plugins = require("./lib/plugins")
 var all = plugins.loadAll();
 
 // query parser
