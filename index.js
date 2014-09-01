@@ -82,13 +82,13 @@ app.post("/api/auth", function(req, res, next) {
 
     // parse and provide some error correction
     body = JSON.parse(body || '{}'); // parse the body
-    if (!body.password) {
+    if (!body.password && !argv.dev) {
       res.send({ERR: "No Password provided"});
       return
     }
 
     // check the information (or, in developer mode)
-    if ( config.password.slice(1) == sha256(body.password) || argv.dev ) {
+    if ( argv.dev || config.password.slice(1) == sha256(body.password) ) {
       // success!
       res.send({
         status: "OK",

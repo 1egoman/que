@@ -38,11 +38,14 @@ app.controller('userController', function($http, $scope) {
       data: JSON.stringify(packet),
       headers: { 'Content-Type': 'application/json' }  // pass as json
     }).success(function(data) {
-
+      console.log(data)
       if (data.status == "OK") {
         // successful login!
         console.log("Logged in as", data);
         root.password = '';
+
+        // for cleanliness
+        password == null && $("body > div.login").hide()
 
         // fade out the login page, and fade in the body
         $("body > div.login").fadeOut("fast", function(){
@@ -77,7 +80,8 @@ app.controller('userController', function($http, $scope) {
   }
 
 
-
+  // try to login
+  this.login(null);
 
 });
 
