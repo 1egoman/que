@@ -38,7 +38,7 @@ app.controller('userController', function($http, $scope) {
       data: JSON.stringify(packet),
       headers: { 'Content-Type': 'application/json' }  // pass as json
     }).success(function(data) {
-      console.log(data)
+
       if (data.status == "OK") {
         // successful login!
         console.log("Logged in as", data);
@@ -55,7 +55,7 @@ app.controller('userController', function($http, $scope) {
           }, 250);
         });
 
-      } else {
+      } else if (password != '') {
         // failed login
         $("body > div.login").removeClass("fail");
         setTimeout(function(){

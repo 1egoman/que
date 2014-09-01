@@ -93,7 +93,8 @@ app.post("/api/auth", function(req, res, next) {
       res.send({
         status: "OK",
         username: config.user.first_name || "User",
-        rights: 0
+        rights: 0,
+        dev: argv.dev
       });
     } else {
       // fail
