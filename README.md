@@ -3,6 +3,15 @@
 
 Note: run `npm install` in the root and in each plugin folder (in /plugins/*) before running `node index.js`
 
+config.json
+===
+An average user should only need to change:
+- `port`: The network port that Que runs on
+  - Default: 8000
+  - Can be changed to any available port on the system ( < 1024 in unix often requires root )
+- `password`: Change to whatever password you want to use to login to Que. 
+  - Default: '1234'
+  - It will be automatically hashed on first run for security. 
 
 
 API Explaination
@@ -36,6 +45,7 @@ As a response, you'll get:
 }
 ```
 ("OK" can also be "ERR" for an error, or "NOHIT" for an error where a search failed, ex: a faild wolfram alpha query)
+
 
 Licence
 ===
