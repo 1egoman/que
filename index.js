@@ -64,7 +64,7 @@ app.get("/api/service/:service", function(req, res, next) {
 // authentication request
 app.post("/api/auth", function(req, res, next) {
   var body = '';
-  
+
   // a data chunk
   req.on('data', function(chunk) {
     body += chunk.toString();
@@ -76,12 +76,27 @@ app.post("/api/auth", function(req, res, next) {
 
   // end of request
   req.on('end', function() {
+
+    // parse and provide some error correction
     body = JSON.parse(body || '{}'); // parse the body
-    res.send({
-      status: "OK",
-      username: "Qube",
-      rights: 0
-    });
+    if (!body.password) {
+      res.send({ERR: "No Password provided"});
+      return
+    }
+
+    // check the information
+    if ( config.password.slice(1) == sha256(body.password) ) {
+      // success!
+      res.send({
+        status: "OK",
+        username: config.user.first_name || "User",
+        rights: 0
+      });
+    } else {
+      // fail
+      res.send({ERR: "Bad Password"});
+    }
+
   });
 
 });
