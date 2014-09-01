@@ -23,8 +23,14 @@ var history = []
 
 // check config (underscore signifies hashed password)
 if ( !config.password.startsWith('_') ) {
+
+  // hash the password
   config.password = '_' + sha256(config.password);
-  console.log("Hashed password in config file")
+
+  // write config
+  fs.writeFile(__dirname + "/config.json", JSON.stringify(config, null, 2), function() {
+    console.log(" * Auto hashed password in config file")
+  });
 }
 
 

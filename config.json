@@ -1,11 +1,26 @@
 {
   "port": 8000,
-  "password": "1234",
+  "password": "_03ac674216f3e15c761ee1a5e255f067953623c8b388b4459e13f978d7c846f4",
   "user_info": {
     "first_name": "John",
     "last_name": "Smith"
   },
-
-  "trueWords": ["yes", "true", "yea", "yep", "yay", "correct", "ok", "sure"],
-  "falseWords": ["no", "false", "nope", "ney", "nay", "incorrect"]
+  "trueWords": [
+    "yes",
+    "true",
+    "yea",
+    "yep",
+    "yay",
+    "correct",
+    "ok",
+    "sure"
+  ],
+  "falseWords": [
+    "no",
+    "false",
+    "nope",
+    "ney",
+    "nay",
+    "incorrect"
+  ]
 }
