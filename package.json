@@ -8,7 +8,6 @@
     "curry": "1.2.x",
     "mime": "1.2.x",
     "express": "4.x.x",
-    "tap": "0.4.x",
     "request": "2.40.x",
     "sha256": "0.1.x"
   },
