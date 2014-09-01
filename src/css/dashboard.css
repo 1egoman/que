@@ -98,3 +98,34 @@ div.search-history span span:last-child {
 div.search-history span:last-child span:last-child {
   font-size: 2em;
 }
+
+
+/* login failure */
+
+@-webkit-keyframes shake {
+  0% { -webkit-transform: translate(2px, 0px)  }
+  10% { -webkit-transform: translate(-1px, 0px) }
+  20% { -webkit-transform: translate(-3px, 0px)  }
+  30% { -webkit-transform: translate(0px, 0px)  }
+  40% { -webkit-transform: translate(1px, 0px)  }
+  50% { -webkit-transform: translate(-1px, 0px) }
+  60% { -webkit-transform: translate(-3px, 0px)  }
+  70% { -webkit-transform: translate(2px, 0px) }
+  80% { -webkit-transform: translate(-1px, 0px)  }
+  90% { -webkit-transform: translate(2px, 0px)  }
+  100% { -webkit-transform: translate(1px, 0px) }
+}
+
+/* the shaking */
+div.login.fail div.row > div {
+  -webkit-animation-name: shake;
+  -webkit-animation-duration: 0.5s;
+  -webkit-transform-origin:50% 50%;
+  -webkit-animation-iteration-count: 1;
+  -webkit-animation-timing-function: linear;
+}
+
+/* color it red */
+div.login.fail input[type=password] {
+  border-color: #E5A0A0;
+}

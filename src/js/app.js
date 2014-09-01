@@ -8,12 +8,77 @@ app.config(['$compileProvider', function( $compileProvider ) {
 // controls current logged in user
 app.controller('userController', function($http, $scope) {
 
+  var root = this;
+
   // current, logged in user information
   $scope.currentUser = null;
 
-  // the username and password
-  this.username = '';
+  // the password from the form
   this.password = '';
+
+  // has login failed?
+  $scope.failedLogin = false;
+
+  // login to Que
+  this.login = function(username, password) {
+
+    // use pre-defined values if not specified
+    password = password || root.password;
+
+    // create the packet
+    packet = {
+      password: password,
+      challenge: 0
+    }
+
+    // http request
+    $http({
+      method: 'POST',
+      url: '/api/auth',
+      data: JSON.stringify(packet),
+      headers: { 'Content-Type': 'application/json' }  // pass as json
+    }).success(function(data) {
+
+      if (data.status == "OK") {
+        // successful login!
+        console.log("Logged in as", data);
+        root.password = '';
+
+        // fade out the login page, and fade in the body
+        $("body > div.login").fadeOut("fast", function(){
+          $scope.currentUser = data;
+          setTimeout(function(){
+            $("body > div.app").fadeIn("slow");
+          }, 250);
+        });
+
+      } else {
+        // failed login
+        $("body > div.login").removeClass("fail");
+        setTimeout(function(){
+          $("body > div.login").addClass("fail");
+        }, 100);
+      }
+
+    });
+  }
+
+  // logout from Que
+  this.logout = function() {
+
+    // fade in the login page, and fade out the body
+    $("body > div.app").fadeOut("fast", function(){
+      $scope.currentUser = null;
+      setTimeout(function(){
+        $("body > div.login").removeClass("fail");
+        $("body > div.login").fadeIn("slow");
+      }, 250);
+    });
+  }
+
+
+
+
 });
 
 // controls user navigation (what page they are on)

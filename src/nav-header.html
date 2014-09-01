@@ -52,9 +52,9 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="?logout">
+        <li><a href ng-click="userCtrl.logout()">
           <span class="glyphicon glyphicon-log-out"></span>
-          Logout
+          Logout {{currentUser.user.first_name}}
           </a>
         </li>
       </ul>
