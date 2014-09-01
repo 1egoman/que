@@ -4,19 +4,24 @@ var http = require('http'),
     sha256 = require("sha256");
 require('sugar');
 
-// plugin loader
-var plugins = require("./plugins")
-
 // config
 var config = JSON.parse( fs.readFileSync(__dirname + "/config.json").toString() )
 
+// plugin loader
+var plugins = require("./plugins")
+var all = plugins.loadAll();
+
+// query parser
+var query = require("./lib/query")
+query.init(all, config);
+
 // get args
 var argv = require('minimist')(process.argv.slice(2));
+
+// set up the express app
 var express = require('express')
 var app = express();
 
-// load plugins
-var all = plugins.loadAll();
 
 // query history
 var history = []
@@ -153,73 +158,10 @@ app.post("/api/query", function(req, res, next) {
   req.on('end', function() {
     body = JSON.parse(body || '{}'); // parse the body
 
-    // create callback object
-    var callbackObject = function(text, status, callback) {
-
-      // failed request
-      if (text == false) {
-        res.send( {ERROR: status || null} )
-      }
-
-      // create packet, if it isn't already
-      if (typeof text == "string") {
-        packet = {"OK": text, "complete": callback == undefined}
-      } else {
-        packet = text;
-      }
-
-      // add to history
-      hist = {packet: packet, when: new Date(), query: body, complete: callback == undefined, callback: callback, status: status}
-      history.push(hist)
-
-      // end of query
-      res.send(packet);
-    }
-
-    if (history.length == 0 || history[history.length-1].complete == true) {
-
-      // sort all plugins based on priority
-      all.all = all.all.sortBy(function(n) {
-        return n.priority || 0
-      })
-
-      // do query
-      resp = all.validateFor(body.query.text)
-
-      // if query was successful, continue
-      if (resp != false) {
-
-        // get the plugin's response
-        body.ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
-        resp.then(body.query.text, all.services, callbackObject, body)
-
-      } else {
-        // no plugin's matched the query
-        res.end( "{NOHIT: null}" )
-      }
-
-    } else {
-      // otherwise, just run the callback
-      hist = history[history.length-1]
-      if (hist.status && hist.status.type == "boolean") {
-
-        // do a boolean operation
-        ifTrue = body.query.text.split(' ').intersect(config.trueWords).length > 0
-        ifFalse = body.query.text.split(' ').intersect(config.falseWords).length > 0
-
-        // check it
-        if (ifTrue && !ifFalse) {
-          hist.callback(true, null, callbackObject)
-        } else if (!ifTrue && ifFalse) {
-          hist.callback(false, null, callbackObject)
-        } else {
-          hist.callback(body.query.text, null, callbackObject)
-        }
-
-      } else {
-        hist.callback(body.query.text, null, callbackObject)
-      }
-    }
+    // do the query
+    query.parse(body, function(response) {
+      res.send(response);
+    }, history);
 
 
   });
