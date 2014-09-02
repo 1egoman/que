@@ -6,7 +6,6 @@ node_js:
   - 0.8
 
 before_script:
-  - export QUE_TEST_PASSWORD="1234"
   - npm install -g mocha
 
   # for wolfram alpha
