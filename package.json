@@ -17,6 +17,7 @@
     "twitter": "@rgausnet"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "deps": "sh update.sh"
   }
 }
