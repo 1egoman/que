@@ -7,6 +7,7 @@ var fs = require("fs"),
     chai = require("chai");
 
 // initialize stuff
+config.password = '_' + sha256("1234");
 all = plugins.loadAll() // load plugins
 query.init(all, config) // initialize query
 auth.init(config) // initialize auth
