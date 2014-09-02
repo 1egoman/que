@@ -8,7 +8,7 @@ var fs = require("fs"),
     chai = require("chai");
 
 // initialize stuff
-config.password = '_' + sha256("1234");
+config.password = '_' + sha256(process.env.QUE_TEST_PASSWORD || "1234"); // set password
 all = plugins.loadAll() // load plugins
 query.init(all, config) // initialize query
 auth.init(config) // initialize auth
@@ -168,7 +168,7 @@ describe("auth", function() {
     // expect(process.env.QUE_TEST_PASSWORD).to.not.be.a("undefined");
 
     // Note: because of the password, if it is changed in the repo the test will fail
-    authResponse = auth.authenticate({password: "1234"}, '127.0.0.1', false);
+    authResponse = auth.authenticate({password: process.env.QUE_TEST_PASSWORD || "1234"}, '127.0.0.1', false);
     expect(authResponse).to.not.equal(false);
   });
 
