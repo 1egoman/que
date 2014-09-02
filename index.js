@@ -208,7 +208,7 @@ app.use(function(err, req, res, next) {
 });
 
 
-var server = app.listen(config.port || 8000, function() {
+var server = app.listen(process.env.PORT || config.port || 8000, function() {
   console.log("Que is ready!")
   console.log('Listening on port %d', server.address().port);
 });
