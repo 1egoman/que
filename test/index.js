@@ -163,9 +163,9 @@ describe("auth", function() {
   it("Logging In", function() {
 
     // password exists?
-    expect(process.env.QUE_TEST_PASSWORD).to.not.be.a("undefined");
+    // expect(process.env.QUE_TEST_PASSWORD).to.not.be.a("undefined");
 
-    authResponse = auth.authenticate({password: process.env.QUE_TEST_PASSWORD}, '127.0.0.1', false);
+    authResponse = auth.authenticate({password: "1234"}, '127.0.0.1', false);
     expect(authResponse).to.equal(true);
   });
 
