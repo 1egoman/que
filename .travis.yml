@@ -8,3 +8,8 @@ node_js:
 before_script:
   - export QUE_TEST_PASSWORD="1234"
   - npm install -g mocha
+
+  # for wolfram alpha
+  - cd plugins/wolfram/
+  - npm install
+  - cd ../..
