@@ -17,6 +17,6 @@
     "twitter": "@rgausnet"
   },
   "scripts": {
-    "test": "tap ./test"
+    "test": "mocha"
   }
 }
