@@ -1,96 +1,186 @@
-var test = require("tap").test,
-    http = require("http"),
-    prs = require('child_process');
+// get the config
+var fs = require("fs"),
+    config = JSON.parse( fs.readFileSync(__dirname + "/../config.json").toString() ),
+    plugins = require("../lib/plugins"),
+    query = require("../lib/query"),
+    auth = require("../lib/auth"),
+    chai = require("chai");
 
-// start the tests
-test("API Test", function (i) {
+// initialize stuff
+all = plugins.loadAll() // load plugins
+query.init(all, config) // initialize query
+auth.init(config) // initialize auth
 
-  i.test("/api/services endpoint", function(t) {
+// query template
+var history = [];
+queryTemplate = {
+  query: {
+    text: ""
+  },
+  ip: "127.0.0.1"
+}
 
-    var options = {
-      host: '127.0.0.1',
-      port: process.env.PORT || 8000,
-      path: '/api/services'
-    };
+// chai constants
+var expect = chai.expect;
 
-    // http callback
-    callback = function(response) {
-      var str = '';
+// Plugins Tests
+describe("plugins", function() {
 
-      // another chunk of data has been recieved
-      response.on('data', function (chunk) {
-        str += chunk;
-      });
 
-      // the whole response has been recieved
-      response.on('end', function () {
-        out = JSON.parse(str)
-        t.type(out, "object", "endpoint not outputting an object")
-      });
-    }
+  describe("Make sure there are plugins", function() {
 
-    // do request
-    http.request(options, callback).end();
+    it("The .loadAll() method should return at least 1 query", function() {
+      expect(all).to.be.a("object");
+      expect(all.all).to.not.have.length(0);
+    });
+
+    it("The .loadAll() method should return at least 1 service", function() {
+      expect(all).to.be.a("object");
+      expect( Object.keys(all.services) ).to.not.have.length(0);
+    });
   });
 
-  i.test("/api/service/calendar endpoint", function(t) {
+  describe("Query Tests", function() {
 
-    var options = {
-      host: '127.0.0.1',
-      port: process.env.PORT || 8000,
-      path: '/api/service/calendar'
-    };
+    it("A query with query.text=''", function() {
 
-    // http callback
-    callback = function(response) {
-      var str = '';
-
-      // another chunk of data has been recieved
-      response.on('data', function (chunk) {
-        str += chunk;
+      // do query
+      query.parse(queryTemplate, function(response) {
+        expect(response).to.be.a("object");
+        expect(response.OK).to.not.be.a("undefined");
       });
+    });
 
-      // the whole response has been recieved
-      response.on('end', function () {
-        out = JSON.parse(str)
-        t.type(out, "array", "calendar endpoint not outputting an array of events")
+    it("TestPlugin -> Normal Query", function() {
+
+      // do query
+      queryTemplate.query.text = "TestPlugin Normal Query";
+      query.parse(queryTemplate, function(response) {
+
+        expect(response).to.be.a("object");
+        expect(response.OK).to.equal("Normal Response");
+        expect(response.complete).to.equal(true);
+
       });
-    }
+    });
 
-    // do request
-    http.request(options, callback).end();
+    it("TestPlugin -> Chained Query", function() {
+
+      // do 1st query
+      queryTemplate.query.text = "TestPlugin Chained Query";
+      query.parse(queryTemplate, function(response) {
+
+        expect(response).to.be.a("object");
+        expect(response.OK).to.equal("Chained Response");
+        expect(response.complete).to.equal(false);
+
+        // do 2nd query
+        queryTemplate.query.text = "Chained Query #2";
+        query.parse(queryTemplate, function(response) {
+
+          expect(response).to.be.a("object");
+          expect(response.OK).to.equal("Final Chained Response");
+          expect(response.complete).to.equal(true);
+
+        }, history);
+
+
+      }, history);
+    });
+
+    it("TestPlugin -> Function Validation", function() {
+
+      // do query
+      queryTemplate.query.text = "TestPlugin Function Validation Query";
+      query.parse(queryTemplate, function(response) {
+
+        expect(response).to.be.a("object");
+        expect(response.OK).to.equal("Win");
+        expect(response.complete).to.equal(true);
+
+      });
+    });
+
+    it("TestPlugin -> Priority Check", function() {
+
+      // do query
+      queryTemplate.query.text = "TestPlugin Priority Query";
+      query.parse(queryTemplate, function(response) {
+
+        expect(response).to.be.a("object");
+        expect(response.OK).to.equal("Win");
+        expect(response.complete).to.equal(true);
+
+      });
+    });
   });
 
-  i.test("/api/query endpoint", function(t) {
+  describe("Service Tests", function() {
 
-    var options = {
-      host: '127.0.0.1',
-      port: process.env.PORT || 8000,
-      path: '/api/query',
-      method: "POST"
-    };
+    // for function tests
+    describe("As Function", function() {
 
-    // http callback
-    callback = function(response) {
-      var str = '';
-
-      // another chunk of data has been recieved
-      response.on('data', function (chunk) {
-        str += chunk;
+      it("Instantiation", function() {
+        a = new all.services.TestPluginFunction();
+        expect(a).to.be.a("object");
       });
 
-      // the whole response has been recieved
-      response.on('end', function () {
-        out = JSON.parse(str)
-        t.type(out, "object", "endpoint not outputting an object")
+      it("Service Methods", function() {
+        a = new all.services.TestPluginFunction();
+        expect( a.exampleMethod(1) ).to.equal("Arg was 1");
       });
-    }
 
-    // do request
-    req = http.request(options, callback);
-    req.write('{"query": {"text": "test"}}');
-    req.end();
+      it("HTML Output", function() {
+        a = new all.services.TestPluginFunction();
+        expect( a.getData() ).to.equal("<p>Output</p>");
+      });
+    });
+
+    // for object tests
+    describe("As Object", function() {
+
+      it("Instantiation", function() {
+        a = all.services.TestPluginObject
+        expect(a).to.be.a("object");
+      });
+
+      it("Service Methods", function() {
+        a = all.services.TestPluginObject;
+        expect( a.exampleMethod(1) ).to.equal("Arg was 1");
+      });
+
+      it("HTML Output", function() {
+        a = all.services.TestPluginObject;
+        expect( a.getData() ).to.equal("<p>Output</p>");
+      });
+    });
+  });
+});
+
+// Authentication Tests
+describe("auth", function() {
+
+  it("Logging In", function() {
+
+    // password exists?
+    expect(process.env.QUE_TEST_PASSWORD).to.not.be.a("undefined");
+
+    authResponse = auth.authenticate({password: process.env.QUE_TEST_PASSWORD}, '127.0.0.1', false);
+    expect(authResponse).to.equal(true);
   });
 
-  t.end()
-})
+  it("Checking Login Status", function() {
+
+    authResponse = auth.check('127.0.0.1')
+    expect(authResponse).to.be.a("object");
+    expect(authResponse.username).to.be.a("string");
+    expect(authResponse.dev).to.equal(false);
+  });
+
+  it("Logging out", function() {
+    auth.expire('127.0.0.1');
+
+    authResponse = auth.check('127.0.0.1')
+    expect(authResponse).to.equal(false);
+  });
+});

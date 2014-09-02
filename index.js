@@ -1,22 +1,35 @@
+/**
+  index.js (https://github.com/1egoman/que)
+  This file ties together all the library's and contains the server code.
+*/
 var http = require('http'),
     fs = require("fs"),
     mime = require("mime"),
     sha256 = require("sha256");
 require('sugar');
 
-// plugin loader
-var plugins = require("./plugins")
-
 // config
 var config = JSON.parse( fs.readFileSync(__dirname + "/config.json").toString() )
 
+// plugin loader
+var plugins = require("./lib/plugins")
+var all = plugins.loadAll();
+
+// query parser
+var query = require("./lib/query")
+query.init(all, config);
+
 // get args
 var argv = require('minimist')(process.argv.slice(2));
+
+// auth
+var auth = require("./lib/auth");
+auth.init(config);
+
+// set up the express app
 var express = require('express')
 var app = express();
 
-// load plugins
-var all = plugins.loadAll();
 
 // query history
 var history = []
@@ -64,47 +77,6 @@ app.get("/api/service/:service", function(req, res, next) {
   }
 });
 
-// authentication request
-app.post("/api/auth", function(req, res, next) {
-  var body = '';
-
-  // a data chunk
-  req.on('data', function(chunk) {
-    body += chunk.toString();
-
-    // Too much POST data, kill the connection!
-    if (body.length > 1e6)
-      req.connection.destroy();
-  });
-
-  // end of request
-  req.on('end', function() {
-
-    // parse and provide some error correction
-    body = JSON.parse(body || '{}'); // parse the body
-    if (!body.password && !argv.dev) {
-      res.send({ERR: "No Password provided"});
-      return
-    }
-
-    // check the information (or, in developer mode)
-    if ( argv.dev || config.password.slice(1) == sha256(body.password) ) {
-      // success!
-      res.send({
-        status: "OK",
-        username: config.user.first_name || "User",
-        rights: 0,
-        dev: argv.dev
-      });
-    } else {
-      // fail
-      res.send({ERR: "Bad Password"});
-    }
-
-  });
-
-});
-
 // get all services
 app.get("/api/services", function(req, res, next) {
 
@@ -128,7 +100,38 @@ app.get("/api/services", function(req, res, next) {
   })
 
   res.send(out);
-})
+});
+
+// authentication request
+app.post("/api/auth", function(req, res, next) {
+  var body = '';
+
+  // a data chunk
+  req.on('data', function(chunk) {
+    body += chunk.toString();
+
+    // Too much POST data, kill the connection!
+    if (body.length > 1e6)
+      req.connection.destroy();
+  });
+
+  // end of request
+  req.on('end', function() {
+
+    // parse the body, and get the client's ip
+    body = JSON.parse(body || '{}');
+    ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+
+    // check authentication
+    if (auth.authenticate(body, ip, argv.dev) == true) {
+      res.send( auth.check(ip, argv.dev) );
+    } else {
+      res.send({ERR: "Bad Password"})
+    }
+
+
+  });
+});
 
 // get a specific service's information
 app.get("/api/history", function(req, res, next) {
@@ -153,73 +156,10 @@ app.post("/api/query", function(req, res, next) {
   req.on('end', function() {
     body = JSON.parse(body || '{}'); // parse the body
 
-    // create callback object
-    var callbackObject = function(text, status, callback) {
-
-      // failed request
-      if (text == false) {
-        res.send( {ERROR: status || null} )
-      }
-
-      // create packet, if it isn't already
-      if (typeof text == "string") {
-        packet = {"OK": text, "complete": callback == undefined}
-      } else {
-        packet = text;
-      }
-
-      // add to history
-      hist = {packet: packet, when: new Date(), query: body, complete: callback == undefined, callback: callback, status: status}
-      history.push(hist)
-
-      // end of query
-      res.send(packet);
-    }
-
-    if (history.length == 0 || history[history.length-1].complete == true) {
-
-      // sort all plugins based on priority
-      all.all = all.all.sortBy(function(n) {
-        return n.priority || 0
-      })
-
-      // do query
-      resp = all.validateFor(body.query.text)
-
-      // if query was successful, continue
-      if (resp != false) {
-
-        // get the plugin's response
-        body.ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
-        resp.then(body.query.text, all.services, callbackObject, body)
-
-      } else {
-        // no plugin's matched the query
-        res.end( "{NOHIT: null}" )
-      }
-
-    } else {
-      // otherwise, just run the callback
-      hist = history[history.length-1]
-      if (hist.status && hist.status.type == "boolean") {
-
-        // do a boolean operation
-        ifTrue = body.query.text.split(' ').intersect(config.trueWords).length > 0
-        ifFalse = body.query.text.split(' ').intersect(config.falseWords).length > 0
-
-        // check it
-        if (ifTrue && !ifFalse) {
-          hist.callback(true, null, callbackObject)
-        } else if (!ifTrue && ifFalse) {
-          hist.callback(false, null, callbackObject)
-        } else {
-          hist.callback(body.query.text, null, callbackObject)
-        }
-
-      } else {
-        hist.callback(body.query.text, null, callbackObject)
-      }
-    }
+    // do the query
+    query.parse(body, function(response) {
+      res.send(response);
+    }, history);
 
 
   });
