@@ -4,6 +4,7 @@ var fs = require("fs"),
     plugins = require("../lib/plugins"),
     query = require("../lib/query"),
     auth = require("../lib/auth"),
+    sha256 = require("sha256"),
     chai = require("chai");
 
 // initialize stuff
