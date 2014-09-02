@@ -1,4 +1,5 @@
 ![Que](https://cdn.rawgit.com/1egoman/que/master/src/img/logo-black.svg "Que")
+[![Build Status](https://travis-ci.org/1egoman/que.svg?branch=master)](https://travis-ci.org/1egoman/que)
 ===
 
 Note: run `npm install` in the root and in each plugin folder (in /plugins/*) before running `node index.js`
