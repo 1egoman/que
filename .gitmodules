@@ -1,0 +1,3 @@
+[submodule "lib/imperative"]
+	path = lib/imperative
+	url = git@github.com:1egoman/imperative.git
