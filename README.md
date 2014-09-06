@@ -1,6 +1,8 @@
 ![Que](https://cdn.rawgit.com/1egoman/que/master/src/img/logo-black.svg "Que")
-[![Build Status](https://travis-ci.org/1egoman/que.svg?branch=master)](https://travis-ci.org/1egoman/que)
 ===
+
+- [![Build Status](https://travis-ci.org/1egoman/que.svg?branch=master)](https://travis-ci.org/1egoman/que)
+- ![Dependency Status](https://david-dm.org/1egoman/que.png)
 
 Note: run `npm install` in the root and in each plugin folder (in /plugins/*) before running `node index.js`
 
@@ -10,9 +12,9 @@ An average user should only need to change:
 - `port`: The network port that Que runs on
   - Default: 8000
   - Can be changed to any available port on the system ( < 1024 in unix often requires root )
-- `password`: Change to whatever password you want to use to login to Que. 
+- `password`: Change to whatever password you want to use to login to Que.
   - Default: '1234'
-  - It will be automatically hashed on first run for security. 
+  - It will be automatically hashed on first run for security.
 
 
 API Explaination
